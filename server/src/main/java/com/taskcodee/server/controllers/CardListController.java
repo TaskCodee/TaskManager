@@ -3,7 +3,6 @@ package com.taskcodee.server.controllers;
 import com.taskcodee.server.APIs.ApiSuccess;
 import com.taskcodee.server.DTOs.CardListCreationDTO;
 import com.taskcodee.server.DTOs.CardListDTO;
-import com.taskcodee.server.entities.CardList;
 import com.taskcodee.server.services.CardListService;
 import com.taskcodee.server.services.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package com.taskcodee.server.services;
 
 import com.taskcodee.server.DTOs.CardCreationDTO;
-import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.Card;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.repositoires.CardRepository;

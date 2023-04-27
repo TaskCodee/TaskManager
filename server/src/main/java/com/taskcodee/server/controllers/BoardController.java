@@ -3,7 +3,6 @@ package com.taskcodee.server.controllers;
 import com.taskcodee.server.APIs.ApiSuccess;
 import com.taskcodee.server.DTOs.*;
 import com.taskcodee.server.entities.Board;
-import com.taskcodee.server.entities.Card;
 import com.taskcodee.server.services.BoardService;
 import com.taskcodee.server.services.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -42,9 +40,12 @@ public class BoardController {
         BoardCardListCardDTO boardCardListCardDTO = new BoardCardListCardDTO();
         boardCardListCardDTO.setId(board.getId());
         boardCardListCardDTO.setTitle(board.getTitle());
-        boardCardListCardDTO.setCardListCardDTOlist(board.getCardListList().stream().map(obj1 ->
-                new CardListCardDTO(obj1.getId(), obj1.getTitle(), obj1.getCardList().stream().map(obj2 ->
-                        new CardDTO(obj2.getId(), obj2.getTitle(), obj2.getDescription())).collect(toList()))).collect(toList()));
+        boardCardListCardDTO.setCardListCardDTOlist(board.getCardListList().stream()
+                .map(obj1 -> new CardListCardDTO(obj1.getId(), obj1.getTitle(),
+                        obj1.getCardList().stream()
+                                .map(obj2 -> new CardDTO(obj2.getId(), obj2.getTitle(), obj2.getDescription()))
+                                .collect(toList())))
+                .collect(toList()));
         return boardCardListCardDTO;
     }
 
