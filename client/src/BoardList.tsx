@@ -3,22 +3,18 @@ import { useEffect, useState } from 'react';
 import { CardInfo, ListInfo } from './App';
 import BoardCard from './BoardCard';
 
-const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
+const BoardList = ({
+  listInfo,
+  createCard,
+}: {
+  listInfo: ListInfo;
+  createCard: (listId: number, cardInfo?: CardInfo) => void;
+}) => {
   const [cards, setCards] = useState<CardInfo[]>(listInfo.cards);
 
   useEffect(() => {
     setCards(listInfo.cards);
   }, [listInfo.cards]);
-
-  const spawnCard = (cardInfo?: CardInfo) => {
-    const card = cardInfo || {
-      id: Math.floor(Math.random() * 1000000),
-      title: 'Test',
-      description: 'Test description',
-    };
-
-    setCards((prev) => [...prev, card]);
-  };
 
   return (
     <>
@@ -31,7 +27,7 @@ const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
             <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
-        <Button mt={'0.5em'} onClick={() => spawnCard()}>
+        <Button mt={'0.5em'} onClick={() => createCard(listInfo.id)}>
           +
         </Button>
       </Box>
