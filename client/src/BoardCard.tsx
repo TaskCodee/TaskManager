@@ -7,7 +7,7 @@ const BoardCard = ({ cardInfo }: { cardInfo: CardInfo }) => {
     <Card w={'16em'} key={cardInfo.id}>
       {/* <CardHeader>{card.title}</CardHeader> */}
       <CardBody textAlign={'start'}>
-        <Editable defaultValue={cardInfo.description}>
+        <Editable defaultValue={cardInfo.title}>
           <EditablePreview />
           <AutoResizeTextarea />
         </Editable>

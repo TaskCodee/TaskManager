@@ -3,12 +3,6 @@ import BoardList from './BoardList';
 import { useEffect, useState } from 'react';
 import { randomId } from './util';
 
-type Post = {
-  id: number;
-  title: string;
-  body: string;
-};
-
 export type CardInfo = {
   id: number;
   title: string;
@@ -22,30 +16,24 @@ export type ListInfo = {
 };
 
 function App() {
-  const [cards, setCards] = useState<CardInfo[]>([]);
   const [lists, setLists] = useState<ListInfo[]>([]);
 
   useEffect(() => {
     let ignore = false;
 
     const fetchPosts = async () => {
-      const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-      const cards: CardInfo[] = (await res.json()).map((post: Post) => ({
-        id: post.id,
-        title: post.title,
-        description: post.body,
+      const lists = (
+        await (await fetch('/api/newBoards/1')).json()
+      ).cardListCardDTOlist.map((l: any) => ({
+        id: l.id,
+        title: l.title,
+        cards: l.cardDTOList,
       }));
+      console.log(lists);
+
       if (!ignore) {
-        setCards(cards);
-        setLists([
-          {
-            id: 1,
-            title: 'Test List',
-            cards: [cards[0]],
-          },
-        ]);
+        setLists(lists);
       }
-      console.log(cards[0]);
     };
 
     fetchPosts();
@@ -65,13 +53,11 @@ function App() {
   return (
     <>
       <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
-        {cards.length > 0 && (
-          <>
-            {lists.length > 0 &&
-              lists.map((list) => <BoardList listInfo={list} key={list.id} />)}
-            <Button onClick={() => spawnList()}>+</Button>
-          </>
-        )}
+        <>
+          {lists.length > 0 &&
+            lists.map((list) => <BoardList listInfo={list} key={list.id} />)}
+          <Button onClick={() => spawnList()}>+</Button>
+        </>
       </HStack>
     </>
   );
