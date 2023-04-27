@@ -1,7 +1,6 @@
 import { Button, HStack } from '@chakra-ui/react';
 import BoardList from './BoardList';
 import { useEffect, useState } from 'react';
-import { randomId } from './util';
 
 export type CardInfo = {
   id: number;
@@ -16,47 +15,69 @@ export type ListInfo = {
 };
 
 function App() {
+  const boardId = 1;
   const [lists, setLists] = useState<ListInfo[]>([]);
 
-  useEffect(() => {
-    let ignore = false;
+  const fetchBoard = async () => {
+    const lists = (
+      await (await fetch(`/api/newBoards/${boardId}`)).json()
+    ).cardListCardDTOlist.map((l: any) => ({
+      id: l.id,
+      title: l.title,
+      cards: l.cardDTOList,
+    }));
+    console.log(lists);
 
-    const fetchPosts = async () => {
-      const lists = (
-        await (await fetch('/api/newBoards/1')).json()
-      ).cardListCardDTOlist.map((l: any) => ({
-        id: l.id,
-        title: l.title,
-        cards: l.cardDTOList,
-      }));
-      console.log(lists);
-
-      if (!ignore) {
-        setLists(lists);
-      }
-    };
-
-    fetchPosts();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  const spawnList = () => {
-    setLists((prev) => [
-      ...prev,
-      { id: randomId(), title: 'New List', cards: [] },
-    ]);
+    setLists(lists);
   };
+
+  const createList = async (listInfo?: ListInfo) => {
+    const data = listInfo || {
+      boardId,
+      title: 'Test list',
+    };
+
+    const res = await fetch('/api/cardLists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) fetchBoard();
+  };
+
+  const createCard = async (listId: number, cardInfo?: CardInfo) => {
+    const card = cardInfo || { title: 'test card' };
+    const data = { cardListId: listId, ...card };
+
+    const res = await fetch('/api/cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) fetchBoard();
+  };
+
+  useEffect(() => {
+    fetchBoard();
+  }, []);
 
   return (
     <>
       <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
         <>
           {lists.length > 0 &&
-            lists.map((list) => <BoardList listInfo={list} key={list.id} />)}
-          <Button onClick={() => spawnList()}>+</Button>
+            lists.map((list) => (
+              <BoardList
+                listInfo={list}
+                createCard={createCard}
+                key={list.id}
+              />
+            ))}
+          <Button onClick={() => createList()}>+</Button>
         </>
       </HStack>
     </>
