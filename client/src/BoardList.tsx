@@ -27,7 +27,7 @@ const BoardList = ({
             <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
-        <Button mt={'0.5em'} onClick={() => createCard(listInfo.id)}>
+        <Button w={'100%'} mt={'0.5em'} onClick={() => createCard(listInfo.id)}>
           +
         </Button>
       </Box>

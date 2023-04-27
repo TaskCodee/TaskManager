@@ -1,6 +1,6 @@
-import { Button, HStack } from '@chakra-ui/react';
+import { Button, HStack, Input } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type CardInfo = {
   id: number;
@@ -15,21 +15,18 @@ export type ListInfo = {
 };
 
 function App() {
-  const boardId = 1;
+  const [boardId, setBoardId] = useState(1);
   const [lists, setLists] = useState<ListInfo[]>([]);
 
-  const fetchBoard = async () => {
-    const lists = (
-      await (await fetch(`/api/newBoards/${boardId}`)).json()
-    ).cardListCardDTOlist.map((l: any) => ({
-      id: l.id,
-      title: l.title,
-      cards: l.cardDTOList,
-    }));
+  const fetchBoard = useCallback(async () => {
+    const res = await fetch(`/api/boards/${boardId}`);
+    if (!res.ok) return;
+
+    const { lists } = await res.json();
     console.log(lists);
 
     setLists(lists);
-  };
+  }, [boardId]);
 
   const createList = async (listInfo?: ListInfo) => {
     const data = listInfo || {
@@ -37,15 +34,16 @@ function App() {
       title: 'Test list',
     };
 
-    const res = await fetch('/api/cardLists', {
+    const res = await fetch('/api/lists', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
+    if (!res.ok) return;
 
-    if (res.ok) fetchBoard();
+    fetchBoard();
   };
 
   const createCard = async (listId: number, cardInfo?: CardInfo) => {
@@ -63,10 +61,15 @@ function App() {
 
   useEffect(() => {
     fetchBoard();
-  }, []);
+  }, [fetchBoard]);
 
   return (
     <>
+      <Input
+        type={'number'}
+        value={boardId}
+        onChange={(e) => setBoardId(Number(e.target.value))}
+      />
       <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
         <>
           {lists.length > 0 &&
