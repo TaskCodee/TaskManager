@@ -1,7 +1,7 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.CardListCreationDTO;
-import com.taskcodee.server.entities.CardList;
+import com.taskcodee.server.dto.CardListCreationDTO;
+import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.repositoires.CardListRepository;
 import org.hibernate.exception.ConstraintViolationException;
@@ -19,23 +19,23 @@ public class CardListService {
     @Autowired
     private BoardService boardService;
 
-    public List<CardList> findAll() {
+    public List<BoardList> findAll() {
         return cardListRepository.findAll();
     }
 
-    public CardList getReferenceById(Long id) {
+    public BoardList getReferenceById(Long id) {
         return cardListRepository.getReferenceById(id);
     }
 
-    public CardList save(CardListCreationDTO cardListCreationDTO) {
-        CardList cardList = new CardList();
-        cardList.setTitle(cardListCreationDTO.getTitle());
-        cardList.setBoard(boardService.getReferenceById(cardListCreationDTO.getBoardId()));
+    public BoardList save(CardListCreationDTO cardListCreationDTO) {
+        BoardList boardList = new BoardList();
+        boardList.setTitle(cardListCreationDTO.getTitle());
+        boardList.setBoard(boardService.getReferenceById(cardListCreationDTO.getBoardId()));
         try {
-            cardList = cardListRepository.save(cardList);
+            boardList = cardListRepository.save(boardList);
         } catch (ConstraintViolationException ex) {
             throw new MyEntityNotFoundException(cardListCreationDTO.getBoardId());
         }
-        return cardList;
+        return boardList;
     }
 }

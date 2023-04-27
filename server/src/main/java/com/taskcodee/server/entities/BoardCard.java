@@ -1,5 +1,7 @@
 package com.taskcodee.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.taskcodee.server.views.View;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -7,24 +9,27 @@ import java.util.List;
 
 @Entity
 @Table(name = "cards")
-public class Card {
+public class BoardCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.BoardBasic.class})
     private Long id;
 
     @Size(min=2, max=50)
+    @JsonView({View.BoardBasic.class})
     private String title;
 
+    @JsonView({View.BoardBasic.class})
     private String description;
 
     @ManyToOne
-    private CardList cardList;
+    private BoardList list;
 
-    @ManyToMany(mappedBy = "cardList")
-    private List<User> userList;
+    @ManyToMany(mappedBy = "boards")
+    private List<User> users;
 
-    public Card() {
+    public BoardCard() {
     }
 
     public Long getId() {
@@ -51,19 +56,19 @@ public class Card {
         this.description = description;
     }
 
-    public CardList getListCard() {
-        return cardList;
+    public BoardList getList() {
+        return list;
     }
 
-    public void setListCard(CardList cardList) {
-        this.cardList = cardList;
+    public void setList(BoardList list) {
+        this.list = list;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

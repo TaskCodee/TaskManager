@@ -1,5 +1,7 @@
 package com.taskcodee.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.taskcodee.server.views.View;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,6 +12,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.BoardBasic.class})
     private Long id;
 
     //@Size(min=2, max=50)
@@ -21,7 +24,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "card_id")
     )
-    private List<Card> cardList;
+    private List<BoardCard> boards;
 
     @OneToMany(mappedBy = "user")
     private List<BoardMember> boardMemberList;
@@ -45,12 +48,12 @@ public class User {
         this.username = username;
     }
 
-    public List<Card> getCardList() {
-        return cardList;
+    public List<BoardCard> getBoards() {
+        return boards;
     }
 
-    public void setCardList(List<Card> cardList) {
-        this.cardList = cardList;
+    public void setBoards(List<BoardCard> boards) {
+        this.boards = boards;
     }
 
     public List<BoardMember> getBoardMemberList() {

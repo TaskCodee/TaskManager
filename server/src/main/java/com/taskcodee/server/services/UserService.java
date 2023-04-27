@@ -1,6 +1,6 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.UserCreationDTO;
+import com.taskcodee.server.dto.UserCreationDTO;
 import com.taskcodee.server.entities.User;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;

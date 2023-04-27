@@ -1,8 +1,8 @@
 package com.taskcodee.server.controllers;
 
-import com.taskcodee.server.APIs.ApiSuccess;
-import com.taskcodee.server.DTOs.CardCreationDTO;
-import com.taskcodee.server.DTOs.CardDTO;
+import com.taskcodee.server.api.ApiSuccess;
+import com.taskcodee.server.dto.CardCreationDTO;
+import com.taskcodee.server.dto.CardDTO;
 import com.taskcodee.server.services.CardService;
 import com.taskcodee.server.services.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;

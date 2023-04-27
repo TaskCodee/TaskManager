@@ -1,4 +1,4 @@
-package com.taskcodee.server.APIs;
+package com.taskcodee.server.api;
 
 public class ApiSuccess {
 

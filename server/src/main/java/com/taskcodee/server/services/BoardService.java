@@ -1,6 +1,6 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.BoardCreationDTO;
+import com.taskcodee.server.dto.BoardCreationDTO;
 import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.BoardMember;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
@@ -49,7 +49,7 @@ public class BoardService {
         BoardMember boardMember = new BoardMember();
         boardMember.setUser(userService.getReferenceById(boardCreationDTO.getUserId()));
         boardMember.setBoard(boardRepository.getReferenceById(board.getId()));
-        boardMember.setRole("Owner");
+        boardMember.setRole("OWNER");
         boardMemberService.save(boardMember);
     }
 }

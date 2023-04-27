@@ -1,6 +1,6 @@
 package com.taskcodee.server.controllers;
 
-import com.taskcodee.server.APIs.ApiError;
+import com.taskcodee.server.api.ApiError;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import jakarta.persistence.PersistenceException;

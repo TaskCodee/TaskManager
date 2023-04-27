@@ -1,28 +1,28 @@
-package com.taskcodee.server.DTOs;
+package com.taskcodee.server.dto;
 
-public class CardDTO {
+public class CardCreationDTO {
 
-    private Long id;
+    private Long cardListId;
 
     private String title;
 
     private String description;
 
-    public CardDTO() {
+    public CardCreationDTO() {
     }
 
-    public CardDTO(Long id, String title, String description) {
-        this.id = id;
+    public CardCreationDTO(Long cardListId, String title, String description) {
+        this.cardListId = cardListId;
         this.title = title;
         this.description = description;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCardListId() {
+        return cardListId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCardListId(Long cardListId) {
+        this.cardListId = cardListId;
     }
 
     public String getTitle() {

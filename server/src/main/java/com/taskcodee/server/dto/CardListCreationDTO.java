@@ -1,4 +1,4 @@
-package com.taskcodee.server.DTOs;
+package com.taskcodee.server.dto;
 
 public class CardListCreationDTO {
 

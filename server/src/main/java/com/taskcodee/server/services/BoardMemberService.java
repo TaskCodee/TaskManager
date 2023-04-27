@@ -1,14 +1,7 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.BoardCreationDTO;
-import com.taskcodee.server.DTOs.BoardMemberDTO;
-import com.taskcodee.server.DTOs.UserCreationDTO;
-import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.BoardMember;
-import com.taskcodee.server.entities.User;
 import com.taskcodee.server.repositoires.BoardMemberRepository;
-import com.taskcodee.server.repositoires.BoardRepository;
-import com.taskcodee.server.repositoires.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

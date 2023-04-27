@@ -1,5 +1,7 @@
 package com.taskcodee.server.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.taskcodee.server.views.View;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -11,16 +13,20 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.BoardBasic.class})
     private Long id;
 
     @Size(min=2, max=50)
+    @JsonView({View.BoardBasic.class})
     private String title;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<CardList> cardListList;
+    @JsonView({View.BoardBasic.class})
+    private List<BoardList> lists;
 
     @OneToMany(mappedBy = "board")
-    private List<BoardMember> boardMemberList;
+    @JsonView({View.BoardBasic.class})
+    private List<BoardMember> members;
 
     public Board() {
     }
@@ -41,19 +47,19 @@ public class Board {
         this.title = title;
     }
 
-    public List<CardList> getCardListList() {
-        return cardListList;
+    public List<BoardList> getLists() {
+        return lists;
     }
 
-    public void setCardListList(List<CardList> cardListList) {
-        this.cardListList = cardListList;
+    public void setLists(List<BoardList> lists) {
+        this.lists = lists;
     }
 
-    public List<BoardMember> getBoardMemberList() {
-        return boardMemberList;
+    public List<BoardMember> getMembers() {
+        return members;
     }
 
-    public void setBoardMemberList(List<BoardMember> boardMemberList) {
-        this.boardMemberList = boardMemberList;
+    public void setMembers(List<BoardMember> members) {
+        this.members = members;
     }
 }

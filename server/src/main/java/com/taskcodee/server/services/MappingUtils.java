@@ -1,9 +1,9 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.*;
+import com.taskcodee.server.dto.*;
 import com.taskcodee.server.entities.Board;
-import com.taskcodee.server.entities.Card;
-import com.taskcodee.server.entities.CardList;
+import com.taskcodee.server.entities.BoardCard;
+import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +29,18 @@ public class MappingUtils {
         return boardDTO;
     }
 
-    public CardListDTO mapToCardListDTO(CardList cardList) {
+    public CardListDTO mapToCardListDTO(BoardList boardList) {
         CardListDTO cardListDTO = new CardListDTO();
-        cardListDTO.setId(cardList.getId());
-        cardListDTO.setTitle(cardList.getTitle());
+        cardListDTO.setId(boardList.getId());
+        cardListDTO.setTitle(boardList.getTitle());
         return cardListDTO;
     }
 
-    public CardDTO mapToCardDTO(Card card) {
+    public CardDTO mapToCardDTO(BoardCard boardCard) {
         CardDTO cardDTO = new CardDTO();
-        cardDTO.setId(card.getId());
-        cardDTO.setTitle(card.getTitle());
-        cardDTO.setDescription(card.getDescription());
+        cardDTO.setId(boardCard.getId());
+        cardDTO.setTitle(boardCard.getTitle());
+        cardDTO.setDescription(boardCard.getDescription());
         return cardDTO;
     }
 

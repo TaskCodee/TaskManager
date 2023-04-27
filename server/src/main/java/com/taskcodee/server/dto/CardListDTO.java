@@ -1,15 +1,15 @@
-package com.taskcodee.server.DTOs;
+package com.taskcodee.server.dto;
 
-public class BoardDTO {
+public class CardListDTO {
 
     private Long id;
 
     private String title;
 
-    public BoardDTO() {
+    public CardListDTO() {
     }
 
-    public BoardDTO(Long id, String title) {
+    public CardListDTO(Long id, String title) {
         this.id = id;
         this.title = title;
     }

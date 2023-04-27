@@ -1,7 +1,7 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.DTOs.CardCreationDTO;
-import com.taskcodee.server.entities.Card;
+import com.taskcodee.server.dto.CardCreationDTO;
+import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.repositoires.CardRepository;
 import org.hibernate.exception.ConstraintViolationException;
@@ -19,19 +19,19 @@ public class CardService {
     @Autowired
     private CardListService cardListService;
 
-    public List<Card> findAll() {
+    public List<BoardCard> findAll() {
         return cardRepository.findAll();
     }
 
-    public Card getReferenceById(Long id) {
+    public BoardCard getReferenceById(Long id) {
         return cardRepository.getReferenceById(id);
     }
 
-    public Card save(CardCreationDTO cardCreationDTO) {
-        Card card = new Card();
+    public BoardCard save(CardCreationDTO cardCreationDTO) {
+        BoardCard card = new BoardCard();
         card.setTitle(cardCreationDTO.getTitle());
         card.setDescription(cardCreationDTO.getDescription());
-        card.setListCard(cardListService.getReferenceById(cardCreationDTO.getCardListId()));
+        card.setList(cardListService.getReferenceById(cardCreationDTO.getCardListId()));
         try {
             card = cardRepository.save(card);
         } catch (ConstraintViolationException ex) {

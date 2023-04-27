@@ -1,7 +1,7 @@
 package com.taskcodee.server.controllers;
 
-import com.taskcodee.server.APIs.ApiSuccess;
-import com.taskcodee.server.DTOs.UserCreationDTO;
+import com.taskcodee.server.api.ApiSuccess;
+import com.taskcodee.server.dto.UserCreationDTO;
 import com.taskcodee.server.entities.User;
 import com.taskcodee.server.services.MappingUtils;
 import com.taskcodee.server.services.UserService;

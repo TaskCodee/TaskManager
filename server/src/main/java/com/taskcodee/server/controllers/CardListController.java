@@ -1,8 +1,8 @@
 package com.taskcodee.server.controllers;
 
-import com.taskcodee.server.APIs.ApiSuccess;
-import com.taskcodee.server.DTOs.CardListCreationDTO;
-import com.taskcodee.server.DTOs.CardListDTO;
+import com.taskcodee.server.api.ApiSuccess;
+import com.taskcodee.server.dto.CardListCreationDTO;
+import com.taskcodee.server.dto.CardListDTO;
 import com.taskcodee.server.services.CardListService;
 import com.taskcodee.server.services.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class CardListController {
     @Autowired
     private MappingUtils mappingUtils;
 
-    @GetMapping("cardLists")
+    @GetMapping("/lists")
     public List<CardListDTO> getCardLists() {
         return cardListService.findAll().stream().map(mappingUtils::mapToCardListDTO).collect(Collectors.toList());
     }
 
-    @PostMapping("/cardLists")
+    @PostMapping("/lists")
     public ResponseEntity<Object> addCardList(@RequestBody CardListCreationDTO cardListCreationDTO) {
         cardListService.save(cardListCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The cardList is created!");
