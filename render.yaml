@@ -2,6 +2,7 @@ services:
   - type: web
     name: api
     env: docker
+    dockerfilePath: ./server/Dockerfile
     region: frankfurt
     plan: free
     envVars:
