@@ -1,9 +1,10 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.dto.UserCreationDTO;
+import com.taskcodee.server.dto.users.UserCreationDTO;
 import com.taskcodee.server.entities.User;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
+import com.taskcodee.server.mappers.UserMapper;
 import com.taskcodee.server.repositoires.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,10 +16,10 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private MappingUtils mappingUtils;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -32,9 +33,9 @@ public class UserService {
         return userRepository.getReferenceById(id);
     }
 
-    public void save(UserCreationDTO userCreationDTO) {
+    public User save(UserCreationDTO userCreationDTO) {
         try {
-            userRepository.save(mappingUtils.mapToUserEntity(userCreationDTO));
+            return userRepository.save(userMapper.mapToUserEntity(userCreationDTO));
         } catch (DataIntegrityViolationException ex) {
             throw new EntityAlreadyExistsException(ex.getMessage());
         }

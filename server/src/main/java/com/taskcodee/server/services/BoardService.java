@@ -1,10 +1,11 @@
 package com.taskcodee.server.services;
 
-import com.taskcodee.server.dto.BoardCreationDTO;
+import com.taskcodee.server.dto.boards.BoardCreationDTO;
 import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.BoardMember;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
+import com.taskcodee.server.mappers.BoardMapper;
 import com.taskcodee.server.repositoires.BoardRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,6 @@ import java.util.List;
 public class BoardService {
 
     @Autowired
-    private MappingUtils mappingUtils;
-
-    @Autowired
     private BoardRepository boardRepository;
 
     @Autowired
@@ -26,6 +24,9 @@ public class BoardService {
 
     @Autowired
     private BoardMemberService boardMemberService;
+
+    @Autowired
+    private BoardMapper boardMapper;
 
     public List<Board> findAll() {
         return boardRepository.findAll();
@@ -43,9 +44,9 @@ public class BoardService {
     public void createBoardForOwner(BoardCreationDTO boardCreationDTO) {
         Long count = boardRepository.countBoards(boardCreationDTO.getTitle(), boardCreationDTO.getUserId());
         if(count != 0) {
-            throw new EntityAlreadyExistsException("This table already exists");
+            throw new EntityAlreadyExistsException("This board already exists");
         }
-        Board board = boardRepository.save(mappingUtils.mapToBoardEntity(boardCreationDTO));
+        Board board = boardRepository.save(boardMapper.mapToBoardEntity(boardCreationDTO));
         BoardMember boardMember = new BoardMember();
         boardMember.setUser(userService.getReferenceById(boardCreationDTO.getUserId()));
         boardMember.setBoard(boardRepository.getReferenceById(board.getId()));
