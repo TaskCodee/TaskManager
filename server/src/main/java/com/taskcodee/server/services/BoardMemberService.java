@@ -11,24 +11,8 @@ public class BoardMemberService {
     @Autowired
     private BoardMemberRepository boardMemberRepository;
 
-//    @Autowired
-//    private BoardService boardService;
-
     @Autowired
     private UserService userService;
-
-//    public void createBoardForOwner(User user, Board board) {
-//        BoardMember boardMember = new BoardMember();
-//        boardMember.setUser(userRepository.getReferenceById(user.getId()));
-//        boardMember.setBoard(boardRepository.getReferenceById(board.getId()));
-//    }
-
-//    public void addUserToBoard(BoardMemberDTO boardMemberDTO) {
-//        BoardMember boardMember = new BoardMember();
-//        boardMember.setUser(userService.getReferenceById(boardMemberDTO.getUserId()));
-//        boardMember.setBoard(boardService.getReferenceById(boardMemberDTO.getBoardId()));
-//        boardMemberRepository.save(boardMember);
-//    }
 
     public BoardMember save(BoardMember boardMember) {
         return boardMemberRepository.save(boardMember);

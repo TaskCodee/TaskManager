@@ -1,7 +1,6 @@
 package com.taskcodee.server.controllers;
 
 import com.taskcodee.server.api.ApiSuccess;
-import com.taskcodee.server.dto.cards.CardDTO;
 import com.taskcodee.server.dto.lists.BoardListCreationDTO;
 import com.taskcodee.server.dto.lists.BoardListDTO;
 import com.taskcodee.server.dto.lists.BoardListPutDTO;

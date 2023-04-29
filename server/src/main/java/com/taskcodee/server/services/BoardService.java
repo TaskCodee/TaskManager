@@ -2,9 +2,7 @@ package com.taskcodee.server.services;
 
 import com.taskcodee.server.dto.boards.BoardCreationDTO;
 import com.taskcodee.server.dto.boards.BoardPutDTO;
-import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.entities.Board;
-import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.entities.BoardMember;
 import com.taskcodee.server.exceptions.EntityAlreadyExistsException;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
@@ -65,6 +63,5 @@ public class BoardService {
 
     public void deleteById(Long id) {
         boardRepository.deleteById(id);
-        System.out.println("dtfghji");
     }
 }

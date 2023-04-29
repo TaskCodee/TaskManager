@@ -3,9 +3,7 @@ package com.taskcodee.server.controllers;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.dto.cards.CardDTO;
-import com.taskcodee.server.dto.lists.BoardListPutDTO;
 import com.taskcodee.server.entities.BoardCard;
-import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController

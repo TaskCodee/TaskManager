@@ -22,16 +22,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private MappingUtils mappingUtils;
-
     @Autowired
     private UserMapper userMapper;
 
      @GetMapping("/users")
      public List<UserDTO> getUsers() {
-//     return userService.findAll().stream().map(obj ->
-//             new UserDTO(obj.getId(), obj.getUsername())).collect(Collectors.toList());
          return userService.findAll().stream().map(userMapper::mapToUserDTO).collect(Collectors.toList());
      }
 
