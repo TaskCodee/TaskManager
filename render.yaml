@@ -2,7 +2,7 @@ services:
   - type: web
     name: api
     env: docker
-    dockerfilePath: ./server/Dockerfile
+    rootDir: server
     region: frankfurt
     plan: free
     envVars:
@@ -27,6 +27,17 @@ services:
           name: pg
           property: database
   - type: web
+    name: client
+    env: static
+    rootDir: client
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_HOST
+        fromService:
+          name: api
+          type: web
+          property: host
 
 databases:
   - name: pg

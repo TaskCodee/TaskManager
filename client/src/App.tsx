@@ -1,6 +1,7 @@
 import { Button, HStack, Input } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { API_URL } from './global';
 
 export type CardInfo = {
   id: number;
@@ -19,7 +20,7 @@ function App() {
   const [lists, setLists] = useState<ListInfo[]>([]);
 
   const fetchBoard = useCallback(async () => {
-    const res = await fetch(`/api/boards/${boardId}`);
+    const res = await fetch(`${API_URL}/api/boards/${boardId}`);
     if (!res.ok) return;
 
     const { lists } = await res.json();
@@ -34,7 +35,7 @@ function App() {
       title: 'Test list',
     };
 
-    const res = await fetch('/api/lists', {
+    const res = await fetch(`${API_URL}/api/lists`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ function App() {
     const card = cardInfo || { title: 'test card' };
     const data = { cardListId: listId, ...card };
 
-    const res = await fetch('/api/cards', {
+    const res = await fetch(`${API_URL}/api/cards`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -68,7 +69,9 @@ function App() {
       <Input
         type={'number'}
         value={boardId}
-        onChange={(e) => setBoardId(Number(e.target.value))}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setBoardId(Number(e.target.value))
+        }
       />
       <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
         <>
