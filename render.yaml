@@ -6,6 +6,8 @@ services:
     region: frankfurt
     plan: free
     envVars:
+      - key: PORT
+        value: 8080
       - key: PG_HOST
         fromDatabase:
           name: db
