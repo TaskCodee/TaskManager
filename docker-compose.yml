@@ -4,9 +4,11 @@ services:
     build: ./server
     ports:
       - '8080:8080'
-    env_file:
-      - .env
+    environment:
+      - PG_HOST=db
+      - PG_PASSWORD=${PG_PASSWORD}
   db:
     image: 'postgres:alpine'
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_DB=taskcodee
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
