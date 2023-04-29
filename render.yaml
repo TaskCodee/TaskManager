@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: api
+    env: docker
+    region: frankfurt
+    plan: free
+    envVars:
+      - key: PG_HOST
+        fromDatabase:
+          name: pg
+          property: host
+      - key: PG_PORT
+        fromDatabase:
+          name: pg
+          property: port
+      - key: PG_PASSWORD
+        fromDatabase:
+          name: pg
+          property: password
+      - key: PG_USER
+        fromDatabase:
+          name: pg
+          property: user
+      - key: PG_DATABASE
+        fromDatabase:
+          name: pg
+          property: database
+  - type: web
+
+databases:
+  - name: pg
+    region: frankfurt
+    plan: free
