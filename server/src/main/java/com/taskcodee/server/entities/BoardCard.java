@@ -35,6 +35,6 @@ public class BoardCard {
     private BoardList list;
 
     @ManyToMany(mappedBy = "boards")
-    private List<User> users;
+    private List<BoardMember> boardMembers;
 
 }

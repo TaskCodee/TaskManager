@@ -9,9 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BoardDTO {
-
-    private Long id;
+public class BoardPutDTO {
 
     private String title;
 }

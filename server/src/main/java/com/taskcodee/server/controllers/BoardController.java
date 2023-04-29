@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.boards.BoardCreationDTO;
 import com.taskcodee.server.dto.boards.BoardDTO;
+import com.taskcodee.server.dto.boards.BoardPutDTO;
+import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.entities.Board;
+import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.mappers.BoardMapper;
 import com.taskcodee.server.services.BoardService;
 import com.taskcodee.server.views.View;
@@ -32,12 +35,6 @@ public class BoardController {
         return boardService.findAll().stream().map(boardMapper::mapToBoardDTO).collect(toList());
     }
 
-    @GetMapping("/boards-old/{id}")
-    public BoardDTO getBoardById(@PathVariable Long id) {
-        return boardMapper.mapToBoardDTO(boardService.findById(id));
-        //return mappingUtils.mapToBoardDTO(boardService.findById(id));
-    }
-
     @GetMapping("/boards/{id}")
     @JsonView({View.BoardBasic.class})
     public Board getBoardByIdNew(@PathVariable Long id) {
@@ -51,4 +48,17 @@ public class BoardController {
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
+    @PutMapping("/boards/{id}")
+    public ResponseEntity<Object> putCard(@PathVariable Long id, @RequestBody BoardPutDTO boardPutDTO) {
+        Board board = boardService.update(id, boardPutDTO);
+        ApiSuccess apiSuccess = new ApiSuccess("The board is updated!", boardMapper.mapToBoardDTO(board));
+        return new ResponseEntity<>(apiSuccess, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/boards/{id}")
+    public ResponseEntity<Object> removeBoard(@PathVariable Long id) {
+        boardService.deleteById(id);
+        ApiSuccess apiSuccess = new ApiSuccess("The board is removed!");
+        return new ResponseEntity<>(apiSuccess, HttpStatus.OK);
+    }
 }

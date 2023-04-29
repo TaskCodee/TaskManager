@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
-@Table(name = "boardMembers")
+@Table(name = "board_members")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,5 +31,12 @@ public class BoardMember {
     @ManyToOne
     @JsonView({View.BoardBasic.class})
     private User user;
+
+    @ManyToMany
+    @JoinTable(name = "card_members",
+            joinColumns = @JoinColumn(name = "board_member_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id")
+    )
+    private List<BoardCard> boards;
 
 }

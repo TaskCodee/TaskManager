@@ -32,7 +32,7 @@ public class Board {
     @JsonView({View.BoardBasic.class})
     private List<BoardList> lists;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     @JsonView({View.BoardBasic.class})
     private List<BoardMember> members;
 

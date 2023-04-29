@@ -27,14 +27,7 @@ public class User {
     @Column(unique=true, nullable = false)
     private String username;
 
-    @ManyToMany
-    @JoinTable(name = "user_card",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
-    private List<BoardCard> boards;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<BoardMember> boardMemberList;
 
 }
