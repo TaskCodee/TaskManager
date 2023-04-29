@@ -30,6 +30,7 @@ services:
     name: client
     env: static
     rootDir: client
+    plan: free
     buildCommand: npm run build
     staticPublishPath: ./dist
     envVars:
