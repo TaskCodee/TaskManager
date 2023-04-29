@@ -40,6 +40,6 @@ services:
           property: host
 
 databases:
-  - name: pg
+  - name: db
     region: frankfurt
     plan: free
