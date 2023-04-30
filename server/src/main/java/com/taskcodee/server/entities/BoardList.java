@@ -4,11 +4,19 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.views.View;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Table(name = "cardList")
+@Table(name = "lists")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class BoardList {
 
     @Id
@@ -27,38 +35,4 @@ public class BoardList {
     @JsonView({View.BoardBasic.class})
     private List<BoardCard> cards;
 
-    public BoardList() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public List<BoardCard> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<BoardCard> cards) {
-        this.cards = cards;
-    }
 }

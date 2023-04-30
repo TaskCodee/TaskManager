@@ -1,4 +1,4 @@
-package com.taskcodee.server.api;
+package com.taskcodee.server.dto.boards;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ApiError {
+public class BoardDTO {
 
-    private String message;
-    private String debugMessage;
+    private Long id;
 
+    private String title;
 }

@@ -1,5 +1,6 @@
-package com.taskcodee.server.api;
+package com.taskcodee.server.dto.users;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ApiError {
+public class UserCreationDTO {
 
-    private String message;
-    private String debugMessage;
+    @Size(min=2, max=50)
+    private String username;
 
 }

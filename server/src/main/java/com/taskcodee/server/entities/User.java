@@ -3,11 +3,19 @@ package com.taskcodee.server.entities;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.views.View;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -19,48 +27,7 @@ public class User {
     @Column(unique=true, nullable = false)
     private String username;
 
-    @ManyToMany
-    @JoinTable(name = "user_card",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "card_id")
-    )
-    private List<BoardCard> boards;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<BoardMember> boardMemberList;
 
-    public User() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public List<BoardCard> getBoards() {
-        return boards;
-    }
-
-    public void setBoards(List<BoardCard> boards) {
-        this.boards = boards;
-    }
-
-    public List<BoardMember> getBoardMemberList() {
-        return boardMemberList;
-    }
-
-    public void setBoardMemberList(List<BoardMember> boardMemberList) {
-        this.boardMemberList = boardMemberList;
-    }
 }
