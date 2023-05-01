@@ -21,20 +21,20 @@ public class BoardCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.BoardBasic.class})
+    @JsonView({ View.BoardBasic.class })
     private Long id;
 
-    @Size(min=2, max=50)
-    @JsonView({View.BoardBasic.class})
+    @Size(min = 2, max = 50)
+    @JsonView({ View.BoardBasic.class })
     private String title;
 
-    @JsonView({View.BoardBasic.class})
+    @JsonView({ View.BoardBasic.class })
     private String description;
 
     @ManyToOne
     private BoardList list;
 
-    @ManyToMany(mappedBy = "boards")
+    @ManyToMany(mappedBy = "boards", cascade = CascadeType.REMOVE)
     private List<BoardMember> boardMembers;
 
 }
