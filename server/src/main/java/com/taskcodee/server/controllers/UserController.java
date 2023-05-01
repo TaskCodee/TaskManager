@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         User user = userService.save(userCreationDTO);
-        ApiSuccess apiSuccess = new ApiSuccess("The user is created!", user);
+        ApiSuccess apiSuccess = new ApiSuccess("The user is created!", userMapper.mapToUserDTO(user));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 }
