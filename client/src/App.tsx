@@ -1,6 +1,6 @@
 import { Button, HStack, Input } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 export type CardInfo = {
   id: number;
@@ -68,7 +68,9 @@ function App() {
       <Input
         type={'number'}
         value={boardId}
-        onChange={(e) => setBoardId(Number(e.target.value))}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setBoardId(Number(e.target.value))
+        }
       />
       <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
         <>

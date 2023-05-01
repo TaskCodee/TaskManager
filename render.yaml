@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: api
+    env: docker
+    rootDir: server
+    region: frankfurt
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: PG_HOST
+        fromDatabase:
+          name: db
+          property: host
+      - key: PG_PORT
+        fromDatabase:
+          name: db
+          property: port
+      - key: PG_PASSWORD
+        fromDatabase:
+          name: db
+          property: password
+      - key: PG_USER
+        fromDatabase:
+          name: db
+          property: user
+      - key: PG_DATABASE
+        fromDatabase:
+          name: db
+          property: database
+  - type: web
+    name: client
+    env: static
+    rootDir: client
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_HOST
+        fromService:
+          name: api
+          type: web
+          property: host
+
+databases:
+  - name: db
+    region: frankfurt
+    plan: free
