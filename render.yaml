@@ -8,7 +8,7 @@ services:
     envVars:
       - key: PORT
         value: 8080
-      - ket: SPRING_PROFILES_ACTIVE
+      - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: PG_HOST
         fromDatabase:
