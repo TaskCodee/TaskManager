@@ -7,6 +7,7 @@ services:
     environment:
       - PG_HOST=db
       - PG_PASSWORD=${PG_PASSWORD}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
   db:
     image: 'postgres:alpine'
     environment:

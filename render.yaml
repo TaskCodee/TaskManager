@@ -8,6 +8,8 @@ services:
     envVars:
       - key: PORT
         value: 8080
+      - ket: SPRING_PROFILES_ACTIVE
+        value: prod
       - key: PG_HOST
         fromDatabase:
           name: db
@@ -34,12 +36,6 @@ services:
     rootDir: client
     buildCommand: npm run build
     staticPublishPath: ./dist
-    envVars:
-      - key: VITE_API_HOST
-        fromService:
-          name: api
-          type: web
-          property: host
 
 databases:
   - name: db
