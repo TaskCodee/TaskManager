@@ -1,4 +1,4 @@
-import { Button, HStack } from '@chakra-ui/react';
+import { Button, HStack, Skeleton } from '@chakra-ui/react';
 import BoardList from './BoardList';
 import { useCallback, useEffect, useState } from 'react';
 import BoardSelector from './BoardSelector';
@@ -24,9 +24,10 @@ export type CardInfo = {
 function App() {
   const [boards, setBoards] = useState<BoardInfo[]>([]);
   const [boardId, setBoardId] = useState<number>();
-  const [lists, setLists] = useState<ListInfo[]>([]);
+  const [lists, setLists] = useState<ListInfo[]>();
 
   const selectBoard = (id: number) => {
+    setLists(undefined);
     setBoardId(id);
   };
 
@@ -42,7 +43,7 @@ function App() {
 
   const fetchBoard = async (id?: number) => {
     if (!id) {
-      setLists([]);
+      setLists(undefined);
       return;
     }
 
@@ -51,7 +52,7 @@ function App() {
       const data = await res.json();
       setLists(data.lists);
     } else {
-      setLists([]);
+      setLists(undefined);
     }
   };
 
@@ -131,25 +132,27 @@ function App() {
           selectBoard={selectBoard}
         />
       </HStack>
-      {boardId !== 0 && (
+      {lists ? (
         <>
           <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
-            <>
-              {lists.length > 0 &&
-                lists.map((list) => (
-                  <BoardList
-                    listInfo={list}
-                    createCard={createCard}
-                    deleteList={deleteList}
-                    key={list.id}
-                  />
-                ))}
-              <Button onClick={() => createList()}>
-                <SmallAddIcon />
-              </Button>
-            </>
+            {lists.map((list) => (
+              <BoardList
+                listInfo={list}
+                createCard={createCard}
+                deleteList={deleteList}
+                key={list.id}
+              />
+            ))}
+            <Button onClick={() => createList()}>
+              <SmallAddIcon />
+            </Button>
           </HStack>
         </>
+      ) : (
+        <HStack>
+          <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+          <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+        </HStack>
       )}
     </>
   );
