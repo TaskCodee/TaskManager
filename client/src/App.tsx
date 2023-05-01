@@ -2,6 +2,7 @@ import { Button, HStack } from '@chakra-ui/react';
 import BoardList from './BoardList';
 import { useCallback, useEffect, useState } from 'react';
 import BoardSelector from './BoardSelector';
+import { SmallAddIcon } from '@chakra-ui/icons';
 
 export type BoardInfo = {
   id: number;
@@ -121,7 +122,9 @@ function App() {
   return (
     <>
       <HStack p={'1em'}>
-        <Button onClick={() => createBoard()}>+</Button>
+        <Button onClick={() => createBoard()}>
+          <SmallAddIcon />
+        </Button>
         <BoardSelector
           boardId={boardId}
           boards={boards}
@@ -141,7 +144,9 @@ function App() {
                     key={list.id}
                   />
                 ))}
-              <Button onClick={() => createList()}>+</Button>
+              <Button onClick={() => createList()}>
+                <SmallAddIcon />
+              </Button>
             </>
           </HStack>
         </>

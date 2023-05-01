@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import { CardInfo, ListInfo } from './App';
 import BoardCard from './BoardCard';
+import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
 
 const BoardList = ({
   listInfo,
@@ -40,7 +41,9 @@ const BoardList = ({
           <Box>{listInfo.title}</Box>
           <Spacer />
           <Menu>
-            <MenuButton as={Button}>...</MenuButton>
+            <MenuButton variant={'ghost'} as={Button}>
+              <ChevronDownIcon />
+            </MenuButton>
             <MenuList>
               <MenuItem onClick={() => deleteList(listInfo.id)}>
                 Delete
@@ -53,8 +56,13 @@ const BoardList = ({
             <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
-        <Button w={'100%'} mt={'0.5em'} onClick={() => createCard(listInfo.id)}>
-          +
+        <Button
+          variant={'outline'}
+          w={'100%'}
+          mt={'0.5em'}
+          onClick={() => createCard(listInfo.id)}
+        >
+          <AddIcon />
         </Button>
       </Box>
     </>

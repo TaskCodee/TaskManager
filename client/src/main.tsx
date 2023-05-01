@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { ChakraProvider, ThemeConfig, extendTheme } from '@chakra-ui/react';
 
 const colors = {
   brand: {
@@ -12,7 +12,12 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ colors });
+const config: ThemeConfig = {
+  initialColorMode: 'system',
+  useSystemColorMode: true,
+};
+
+const theme = extendTheme({ config, colors });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
