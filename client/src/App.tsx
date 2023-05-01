@@ -86,6 +86,15 @@ function App() {
     fetchBoard(boardId);
   };
 
+  const deleteList = async (id: number) => {
+    const res = await fetch(`/api/lists/${id}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) return;
+
+    fetchBoard(boardId);
+  };
+
   const createCard = async (listId: number, cardInfo?: CardInfo) => {
     const card = cardInfo || { title: 'test card' };
     const data = { cardListId: listId, ...card };
@@ -128,6 +137,7 @@ function App() {
                   <BoardList
                     listInfo={list}
                     createCard={createCard}
+                    deleteList={deleteList}
                     key={list.id}
                   />
                 ))}
