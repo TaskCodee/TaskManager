@@ -37,8 +37,8 @@ public class BoardListController {
 
     @PostMapping("/lists")
     public ResponseEntity<Object> addCardList(@RequestBody BoardListCreationDTO boardListCreationDTO) {
-        boardListService.save(boardListCreationDTO);
-        ApiSuccess apiSuccess = new ApiSuccess("The cardList is created!");
+        BoardList boardList = boardListService.save(boardListCreationDTO);
+        ApiSuccess apiSuccess = new ApiSuccess("The list is created!", boardListMapper.mapToBoardListDTO(boardList));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
