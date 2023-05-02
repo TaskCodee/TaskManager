@@ -1,11 +1,13 @@
 package com.taskcodee.server.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.dto.cards.CardDTO;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.services.CardService;
+import com.taskcodee.server.views.View;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +27,15 @@ public class CardController {
     private CardMapper cardMapper;
 
     @GetMapping("/cards")
-    public List<CardDTO> getCards() {
-        return cardService.findAll().stream().map(cardMapper::mapToCardDTO).collect(Collectors.toList());
+    @JsonView({View.CardBasic.class})
+    public List<BoardCard> getCards() {
+        return cardService.findAll();
     }
 
     @GetMapping("/cards/{id}")
-    public CardDTO getCardById(@PathVariable Long id) {
-        return cardMapper.mapToCardDTO(cardService.findById(id));
+    @JsonView({View.CardBasic.class})
+    public BoardCard getCardById(@PathVariable Long id) {
+        return cardService.findById(id);
     }
 
     @PostMapping("/cards")
