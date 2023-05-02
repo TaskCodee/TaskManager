@@ -21,11 +21,11 @@ public class BoardList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.BoardBasic.class})
+    @JsonView({View.BoardBasic.class, View.CardBasic.class })
     private Long id;
 
     @Size(min=2, max=50)
-    @JsonView({View.BoardBasic.class})
+    @JsonView({View.BoardBasic.class, View.CardBasic.class })
     private String title;
 
     @ManyToOne
