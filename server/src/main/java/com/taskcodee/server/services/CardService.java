@@ -1,10 +1,7 @@
 package com.taskcodee.server.services;
 
 import com.taskcodee.server.dto.cards.CardCreationDTO;
-import com.taskcodee.server.dto.cards.CardDTO;
-import com.taskcodee.server.dto.lists.BoardListPutDTO;
 import com.taskcodee.server.entities.BoardCard;
-import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.repositoires.CardRepository;
@@ -53,25 +50,17 @@ public class CardService {
 
     public BoardCard update(Long id, CardCreationDTO cardCreationDTO) {
         BoardCard boardCard = findById(id);
-        boardCard.setTitle(cardCreationDTO.getTitle());
-        boardCard.setDescription(cardCreationDTO.getDescription());
-        boardCard.setList(boardListService.getReferenceById(cardCreationDTO.getCardListId()));
+        if(cardCreationDTO.getTitle() != null) {
+            boardCard.setTitle(cardCreationDTO.getTitle());
+        }
+        if(cardCreationDTO.getDescription() != null) {
+            boardCard.setDescription(cardCreationDTO.getDescription());
+        }
+        if(cardCreationDTO.getCardListId() != null) {
+            boardCard.setList(boardListService.getReferenceById(cardCreationDTO.getCardListId()));
+        }
         return cardRepository.save(boardCard);
     }
-
-//    public BoardCard partialUpdate(Long id, CardCreationDTO cardCreationDTO) {
-//        CardDTO cardDTO = cardMapper.mapToCardDTO(findById(id));
-//        if(cardCreationDTO.getCardListId() != null) {
-//            cardDTO.setId(id);
-//        }
-//        if(!cardCreationDTO.getTitle().equals(null)) {
-//            cardDTO.setTitle(cardCreationDTO.getTitle());
-//        }
-//        if(!cardCreationDTO.getDescription().equals(null)) {
-//            cardDTO.setDescription(cardCreationDTO.getDescription());
-//        }
-//        return cardRepository.save(boardCard);
-//    }
 
     public void deleteById(Long id) {
         cardRepository.deleteById(id);

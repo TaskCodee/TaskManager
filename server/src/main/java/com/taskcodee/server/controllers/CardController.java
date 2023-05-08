@@ -3,7 +3,6 @@ package com.taskcodee.server.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
-import com.taskcodee.server.dto.cards.CardDTO;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.services.CardService;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -45,19 +43,12 @@ public class CardController {
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
-    @PutMapping("/cards/{id}")
+    @PatchMapping("/cards/{id}")
     public ResponseEntity<Object> putCard(@PathVariable Long id, @RequestBody CardCreationDTO cardCreationDTO) {
         BoardCard boardCard = cardService.update(id, cardCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The cardList is updated!", cardMapper.mapToCardDTO(boardCard));
         return new ResponseEntity<>(apiSuccess, HttpStatus.OK);
     }
-
-//    @PatchMapping("/cards/{id}")
-//    public ResponseEntity<Object> patchCard(@PathVariable Long id, @RequestBody CardCreationDTO cardCreationDTO) {
-//        BoardCard boardCard = cardService.partialUpdate(id, cardCreationDTO);
-//        ApiSuccess apiSuccess = new ApiSuccess("The cardList is updated!", boardCard);
-//        return new ResponseEntity<>(apiSuccess, HttpStatus.OK);
-//    }
 
     @DeleteMapping("/cards/{id}")
     public ResponseEntity<Object> removeCard(@PathVariable Long id) {
