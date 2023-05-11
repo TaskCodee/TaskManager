@@ -35,9 +35,9 @@ public class BoardListController {
         return boardListMapper.mapToBoardListDTO(boardListService.findById(id));
     }
 
-    @PostMapping("/lists")
-    public ResponseEntity<Object> addCardList(@RequestBody BoardListCreationDTO boardListCreationDTO) {
-        BoardList boardList = boardListService.save(boardListCreationDTO);
+    @PostMapping("/boards/{id}/lists")
+    public ResponseEntity<Object> addCardList(@PathVariable Long id, @RequestBody BoardListCreationDTO boardListCreationDTO) {
+        BoardList boardList = boardListService.save(id, boardListCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The list is created!", boardListMapper.mapToBoardListDTO(boardList));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }

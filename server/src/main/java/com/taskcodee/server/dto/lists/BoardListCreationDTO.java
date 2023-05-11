@@ -11,8 +11,6 @@ import lombok.Setter;
 @Setter
 public class BoardListCreationDTO {
 
-    private Long boardId;
-
     private String title;
 
 }

@@ -42,14 +42,14 @@ public class BoardService {
     }
 
     @Transactional
-    public Board createBoardForOwner(BoardCreationDTO boardCreationDTO) {
-        Long count = boardRepository.countBoards(boardCreationDTO.getTitle(), boardCreationDTO.getUserId());
+    public Board createBoardForOwner(Long userId, BoardCreationDTO boardCreationDTO) {
+        Long count = boardRepository.countBoards(boardCreationDTO.getTitle(), userId);
         if(count != 0) {
             throw new EntityAlreadyExistsException("This board already exists");
         }
         Board board = boardRepository.save(boardMapper.mapToBoardEntity(boardCreationDTO));
         BoardMember boardMember = new BoardMember();
-        boardMember.setUser(userService.getReferenceById(boardCreationDTO.getUserId()));
+        boardMember.setUser(userService.getReferenceById(userId));
         boardMember.setBoard(boardRepository.getReferenceById(board.getId()));
         boardMember.setRole("OWNER");
         boardMemberService.save(boardMember);

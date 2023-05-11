@@ -39,9 +39,9 @@ public class BoardController {
         return boardService.findById(id);
     }
 
-    @PostMapping("/boards")
-    public ResponseEntity<Object> createBoardForOwner(@RequestBody BoardCreationDTO boardCreationDTO) {
-        Board board = boardService.createBoardForOwner(boardCreationDTO);
+    @PostMapping("/users/{id}/boards")
+    public ResponseEntity<Object> createBoardForOwner(@PathVariable Long id, @RequestBody BoardCreationDTO boardCreationDTO) {
+        Board board = boardService.createBoardForOwner(id, boardCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The board is created!", boardMapper.mapToBoardDTO(board));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }

@@ -11,8 +11,6 @@ import lombok.Setter;
 @Setter
 public class BoardCreationDTO {
 
-    private Long userId;
-
     private String title;
 
 }

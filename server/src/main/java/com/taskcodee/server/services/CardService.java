@@ -1,6 +1,7 @@
 package com.taskcodee.server.services;
 
 import com.taskcodee.server.dto.cards.CardCreationDTO;
+import com.taskcodee.server.dto.cards.CardUpdateDTO;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.mappers.CardMapper;
@@ -35,29 +36,29 @@ public class CardService {
         return cardRepository.getReferenceById(id);
     }
 
-    public BoardCard save(CardCreationDTO cardCreationDTO) {
+    public BoardCard save(Long cardListId, CardCreationDTO cardCreationDTO) {
         BoardCard card = new BoardCard();
         card.setTitle(cardCreationDTO.getTitle());
         card.setDescription(cardCreationDTO.getDescription());
-        card.setList(boardListService.getReferenceById(cardCreationDTO.getCardListId()));
+        card.setList(boardListService.getReferenceById(cardListId));
         try {
             card = cardRepository.save(card);
         } catch (ConstraintViolationException ex) {
-            throw new MyEntityNotFoundException(cardCreationDTO.getCardListId());
+            throw new MyEntityNotFoundException(cardListId);
         }
         return card;
     }
 
-    public BoardCard update(Long id, CardCreationDTO cardCreationDTO) {
+    public BoardCard update(Long id, CardUpdateDTO cardUpdateDTO) {
         BoardCard boardCard = findById(id);
-        if(cardCreationDTO.getTitle() != null) {
-            boardCard.setTitle(cardCreationDTO.getTitle());
+        if(cardUpdateDTO.getTitle() != null) {
+            boardCard.setTitle(cardUpdateDTO.getTitle());
         }
-        if(cardCreationDTO.getDescription() != null) {
-            boardCard.setDescription(cardCreationDTO.getDescription());
+        if(cardUpdateDTO.getDescription() != null) {
+            boardCard.setDescription(cardUpdateDTO.getDescription());
         }
-        if(cardCreationDTO.getCardListId() != null) {
-            boardCard.setList(boardListService.getReferenceById(cardCreationDTO.getCardListId()));
+        if(cardUpdateDTO.getCardListId() != null) {
+            boardCard.setList(boardListService.getReferenceById(cardUpdateDTO.getCardListId()));
         }
         return cardRepository.save(boardCard);
     }

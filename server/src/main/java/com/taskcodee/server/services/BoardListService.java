@@ -32,14 +32,14 @@ public class BoardListService {
         return boardListRepository.getReferenceById(id);
     }
 
-    public BoardList save(BoardListCreationDTO boardListCreationDTO) {
+    public BoardList save(Long boardId, BoardListCreationDTO boardListCreationDTO) {
         BoardList boardList = new BoardList();
         boardList.setTitle(boardListCreationDTO.getTitle());
-        boardList.setBoard(boardService.getReferenceById(boardListCreationDTO.getBoardId()));
+        boardList.setBoard(boardService.getReferenceById(boardId));
         try {
             boardList = boardListRepository.save(boardList);
         } catch (ConstraintViolationException ex) {
-            throw new MyEntityNotFoundException(boardListCreationDTO.getBoardId());
+            throw new MyEntityNotFoundException(boardId);
         }
         return boardList;
     }

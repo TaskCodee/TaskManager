@@ -10,7 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CardCreationDTO {
+public class CardUpdateDTO {
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long cardListId;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;

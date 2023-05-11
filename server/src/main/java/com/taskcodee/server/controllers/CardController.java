@@ -3,6 +3,7 @@ package com.taskcodee.server.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
+import com.taskcodee.server.dto.cards.CardUpdateDTO;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.services.CardService;
@@ -36,16 +37,16 @@ public class CardController {
         return cardService.findById(id);
     }
 
-    @PostMapping("/cards")
-    public ResponseEntity<Object> addCard(@RequestBody CardCreationDTO cardCreationDTO) {
-        BoardCard boardCard = cardService.save(cardCreationDTO);
+    @PostMapping("/lists/{id}/cards")
+    public ResponseEntity<Object> addCard(@PathVariable Long id, @RequestBody CardCreationDTO cardCreationDTO) {
+        BoardCard boardCard = cardService.save(id, cardCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The card is created!", cardMapper.mapToCardDTO(boardCard));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
     @PatchMapping("/cards/{id}")
-    public ResponseEntity<Object> putCard(@PathVariable Long id, @RequestBody CardCreationDTO cardCreationDTO) {
-        BoardCard boardCard = cardService.update(id, cardCreationDTO);
+    public ResponseEntity<Object> putCard(@PathVariable Long id, @RequestBody CardUpdateDTO cardUpdateDTO) {
+        BoardCard boardCard = cardService.update(id, cardUpdateDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The cardList is updated!", cardMapper.mapToCardDTO(boardCard));
         return new ResponseEntity<>(apiSuccess, HttpStatus.OK);
     }
