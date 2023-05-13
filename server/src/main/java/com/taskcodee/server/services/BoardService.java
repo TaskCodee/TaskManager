@@ -34,7 +34,7 @@ public class BoardService {
     }
 
     public Board findById(Long id) {
-        return boardRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException(id));
+        return  boardRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException(id));
     }
 
     public Board getReferenceById(Long id) {

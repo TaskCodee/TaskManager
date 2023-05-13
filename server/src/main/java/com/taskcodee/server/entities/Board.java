@@ -30,6 +30,7 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     @JsonView({View.BoardBasic.class})
+    @OrderBy("pos ASC")
     private List<BoardList> lists;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)

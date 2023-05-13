@@ -35,7 +35,7 @@ public class BoardController {
 
     @GetMapping("/boards/{id}")
     @JsonView({View.BoardBasic.class})
-    public Board getBoardByIdNew(@PathVariable Long id) {
+    public Board getBoardById(@PathVariable Long id) {
         return boardService.findById(id);
     }
 
