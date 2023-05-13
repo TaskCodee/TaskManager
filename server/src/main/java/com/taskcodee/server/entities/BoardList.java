@@ -28,6 +28,9 @@ public class BoardList {
     @JsonView({View.BoardBasic.class, View.CardBasic.class })
     private String title;
 
+    @JsonView({View.BoardBasic.class, View.CardBasic.class })
+    private Double pos;
+
     @ManyToOne
     private Board board;
 
