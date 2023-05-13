@@ -5,6 +5,7 @@ import com.taskcodee.server.dto.lists.BoardListPutDTO;
 import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
 import com.taskcodee.server.repositoires.BoardListRepository;
+import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,14 @@ public class BoardListService {
         return boardListRepository.getReferenceById(id);
     }
 
+    @Transactional
     public BoardList save(Long boardId, BoardListCreationDTO boardListCreationDTO) {
+        //Обработать ситуацию, если у доски вообще не будет листов
+        Double maxPosition = boardService.maxListPositionFromBoardById(boardId);
+
         BoardList boardList = new BoardList();
         boardList.setTitle(boardListCreationDTO.getTitle());
+        boardList.setPos(maxPosition + 100);
         boardList.setBoard(boardService.getReferenceById(boardId));
         try {
             boardList = boardListRepository.save(boardList);
