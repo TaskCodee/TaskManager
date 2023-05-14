@@ -17,4 +17,6 @@ public class CardDTO {
 
     private String description;
 
+    private Double pos;
+
 }

@@ -45,10 +45,10 @@ public class CardController {
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
-    @PostMapping("/cards/{id}/move_to")
+    @PatchMapping("/cards/{id}/move_to")
     public ResponseEntity<Object> changeOrder(@PathVariable Long id, @RequestBody IndexDTO indexDTO) {
-        cardService.changeIndex(id, indexDTO);
-        ApiSuccess apiSuccess = new ApiSuccess("The position is changed!");
+        BoardCard boardCard = cardService.changeIndex(id, indexDTO);
+        ApiSuccess apiSuccess = new ApiSuccess("The position is changed!", cardMapper.mapToCardDTO(boardCard));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 

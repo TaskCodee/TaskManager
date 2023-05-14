@@ -67,7 +67,7 @@ public class CardService {
     }
 
     @Transactional
-    public void changeIndex(Long cardId, IndexDTO indexDTO) {
+    public BoardCard changeIndex(Long cardId, IndexDTO indexDTO) {
         BoardCard boardCard = this.findById(cardId);
         BoardList boardList = boardListService.findById(boardCard.getList().getId());
         if(indexDTO.getIndex() < 0 || indexDTO.getIndex() > boardList.getCards().size()) {
@@ -84,7 +84,7 @@ public class CardService {
             boardCard.setPos((boardList.getCards().get(indexDTO.getIndex()).getPos() +
                     boardList.getCards().get(indexDTO.getIndex() + 1).getPos()) / 2);
         }
-        cardRepository.save(boardCard);
+        return cardRepository.save(boardCard);
     }
 
     public void deleteById(Long id) {
