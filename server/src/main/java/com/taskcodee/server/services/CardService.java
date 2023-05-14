@@ -3,6 +3,7 @@ package com.taskcodee.server.services;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.dto.cards.CardUpdateDTO;
 import com.taskcodee.server.dto.cards.IndexDTO;
+import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.exceptions.MyEntityNotFoundException;
@@ -23,6 +24,9 @@ public class CardService {
 
     @Autowired
     private BoardListService boardListService;
+
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     private CardMapper cardMapper;
@@ -69,21 +73,45 @@ public class CardService {
     @Transactional
     public BoardCard changeIndex(Long cardId, IndexDTO indexDTO) {
         BoardCard boardCard = this.findById(cardId);
-        BoardList boardList = boardListService.findById(boardCard.getList().getId());
-        if(indexDTO.getIndex() < 0 || indexDTO.getIndex() > boardList.getCards().size()) {
-            throw new IndexOutOfBoundsException(indexDTO.getIndex());
+        BoardList boardList = boardCard.getList();
+        Board board = boardList.getBoard();
+        if(indexDTO.getIndexCard() == null) {
+            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
+        }
+        if(indexDTO.getIndexList() < 0 || indexDTO.getIndexList() > board.getLists().size()) {
+            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
+        }
+        if(indexDTO.getIndexCard() < 0 || indexDTO.getIndexCard() > boardList.getCards().size()) {
+            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
         }
 
-        if(indexDTO.getIndex() == 0) {
-            boardCard.setPos(boardList.getCards().get(0).getPos() / 2);
-        }
-        else if(indexDTO.getIndex() == boardList.getCards().size() - 1) {
-            boardCard.setPos(boardList.getCards().get(boardList.getCards().size() - 1).getPos() + 100);
+        if(indexDTO.getIndexList() == null || board.getLists().indexOf(boardList) == indexDTO.getIndexList()) {
+            if(indexDTO.getIndexCard() == 0) {
+                boardCard.setPos(boardList.getCards().get(0).getPos() / 2);
+            }
+            else if(indexDTO.getIndexCard() == boardList.getCards().size() - 1) {
+                boardCard.setPos(boardList.getCards().get(boardList.getCards().size() - 1).getPos() + 100);
+            }
+            else {
+                boardCard.setPos((boardList.getCards().get(indexDTO.getIndexCard()).getPos() +
+                        boardList.getCards().get(indexDTO.getIndexCard() + 1).getPos()) / 2);
+            }
         }
         else {
-            boardCard.setPos((boardList.getCards().get(indexDTO.getIndex()).getPos() +
-                    boardList.getCards().get(indexDTO.getIndex() + 1).getPos()) / 2);
+            BoardList newBoardList = board.getLists().get(indexDTO.getIndexList());
+            boardCard.setList(newBoardList);
+            if(indexDTO.getIndexCard() == 0) {
+                boardCard.setPos(newBoardList.getCards().get(0).getPos() / 2);
+            }
+            else if(indexDTO.getIndexCard() == newBoardList.getCards().size() - 1) {
+                boardCard.setPos(newBoardList.getCards().get(newBoardList.getCards().size() - 1).getPos() + 100);
+            }
+            else {
+                boardCard.setPos((newBoardList.getCards().get(indexDTO.getIndexCard()).getPos() +
+                        newBoardList.getCards().get(indexDTO.getIndexCard() + 1).getPos()) / 2);
+            }
         }
+
         return cardRepository.save(boardCard);
     }
 

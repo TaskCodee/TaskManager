@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class IndexDTO {
 
-    private Integer index;
+    private Integer indexList;
+
+    private Integer indexCard;
 }
