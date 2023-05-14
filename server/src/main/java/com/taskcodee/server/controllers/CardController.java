@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.taskcodee.server.api.ApiSuccess;
 import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.dto.cards.CardUpdateDTO;
+import com.taskcodee.server.dto.cards.IndexDTO;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.mappers.CardMapper;
 import com.taskcodee.server.services.CardService;
@@ -41,6 +42,13 @@ public class CardController {
     public ResponseEntity<Object> addCard(@PathVariable Long id, @RequestBody CardCreationDTO cardCreationDTO) {
         BoardCard boardCard = cardService.save(id, cardCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The card is created!", cardMapper.mapToCardDTO(boardCard));
+        return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/cards/{id}/move_to")
+    public ResponseEntity<Object> changeOrder(@PathVariable Long id, @RequestBody IndexDTO indexDTO) {
+        cardService.changeIndex(id, indexDTO);
+        ApiSuccess apiSuccess = new ApiSuccess("The position is changed!");
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
