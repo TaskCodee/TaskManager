@@ -1,124 +1,63 @@
 import { Button, HStack, Skeleton } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BoardSelector from './BoardSelector';
 import { SmallAddIcon } from '@chakra-ui/icons';
-
-export type BoardInfo = {
-  id: number;
-  title: string;
-};
-
-export type ListInfo = {
-  id: number;
-  title: string;
-  cards: CardInfo[];
-};
-
-export type CardInfo = {
-  id: number;
-  title: string;
-  description: string;
-};
+import {
+  useBoard,
+  useBoards,
+  useCreateBoard,
+  useCreateCard,
+  useCreateList,
+  useDeleteList,
+} from './lib/api';
 
 function App() {
-  const [boards, setBoards] = useState<BoardInfo[]>([]);
-  const [boardId, setBoardId] = useState<number>();
-  const [lists, setLists] = useState<ListInfo[]>();
+  const [boardIndex, setBoardIndex] = useState<number>(0);
+  const { triggerDeleteList } = useDeleteList();
+  const { boards, boardsMutate } = useBoards();
+  const { board, boardMutate } = useBoard(
+    boards ? boards[boardIndex].id : null
+  );
 
-  const selectBoard = (id: number) => {
-    setLists(undefined);
-    setBoardId(id);
-  };
+  const { triggerCreateBoard } = useCreateBoard();
+  const { triggerCreateList } = useCreateList();
+  const { triggerCreateCard } = useCreateCard();
 
-  const fetchAllBoards = useCallback(async () => {
-    const res = await fetch('/api/boards');
-    if (!res.ok) return;
-    const data: BoardInfo[] = await res.json();
-    setBoards(data);
-
-    const last = data.at(data.length - 1);
-    if (last) selectBoard(last.id);
-  }, []);
-
-  const fetchBoard = async (id?: number) => {
-    if (!id) {
-      setLists(undefined);
-      return;
-    }
-
-    const res = await fetch(`/api/boards/${id}`);
-    if (res.ok) {
-      const data = await res.json();
-      setLists(data.lists);
-    } else {
-      setLists(undefined);
-    }
-  };
+  useEffect(() => {
+    if (boards) setBoardIndex(boards?.length - 1);
+  }, [boards]);
 
   const createBoard = async (
     title = Math.random().toString(36).slice(2, 5)
   ) => {
-    const res = await fetch('/api/boards', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: 1, title }),
-    });
+    triggerCreateBoard({ userId: 1, title });
 
-    if (!res.ok) return;
-
-    fetchAllBoards();
+    await boardsMutate();
+    await boardMutate();
   };
 
-  const createList = async (listInfo?: ListInfo) => {
-    const data = listInfo || {
-      boardId,
-      title: 'Test list',
-    };
+  const createList = async (boardId: number, title = 'Test list') => {
+    await triggerCreateList({ boardId, title });
 
-    const res = await fetch('/api/lists', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) return;
-
-    fetchBoard(boardId);
+    await boardMutate();
   };
 
   const deleteList = async (id: number) => {
-    const res = await fetch(`/api/lists/${id}`, {
-      method: 'DELETE',
-    });
-    if (!res.ok) return;
+    await triggerDeleteList({ id });
 
-    fetchBoard(boardId);
+    await boardMutate();
   };
 
-  const createCard = async (listId: number, cardInfo?: CardInfo) => {
-    const card = cardInfo || { title: 'test card' };
-    const data = { cardListId: listId, ...card };
+  const createCard = async (
+    listId: number,
+    title = 'Test card',
+    description = 'Test card'
+  ) => {
+    await triggerCreateCard({ cardListId: listId, title, description });
 
-    const res = await fetch('/api/cards', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) return;
-
-    fetchBoard(boardId);
+    await boardMutate();
   };
-
-  useEffect(() => {
-    fetchAllBoards();
-  }, [fetchAllBoards]);
-
-  useEffect(() => {
-    fetchBoard(boardId);
-  }, [boardId]);
 
   return (
     <>
@@ -127,23 +66,23 @@ function App() {
           <SmallAddIcon />
         </Button>
         <BoardSelector
-          boardId={boardId}
+          boardIndex={boardIndex}
           boards={boards}
-          selectBoard={selectBoard}
+          setBoardIndex={setBoardIndex}
         />
       </HStack>
-      {lists ? (
+      {board ? (
         <>
           <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
-            {lists.map((list) => (
+            {board.lists?.map((list) => (
               <BoardList
-                listInfo={list}
                 createCard={createCard}
                 deleteList={deleteList}
+                listInfo={list}
                 key={list.id}
               />
             ))}
-            <Button onClick={() => createList()}>
+            <Button onClick={() => createList(board.id)}>
               <SmallAddIcon />
             </Button>
           </HStack>

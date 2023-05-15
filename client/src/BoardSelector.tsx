@@ -1,26 +1,26 @@
 import { Select } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
-import { BoardInfo } from './App';
+import { BoardInfo } from './lib/api';
 
 const BoardSelector = ({
-  boardId,
+  boardIndex: boardId,
   boards,
-  selectBoard,
+  setBoardIndex,
 }: {
-  boardId?: number;
-  boards: BoardInfo[];
-  selectBoard: (id: number) => void;
+  boardIndex?: number;
+  boards: BoardInfo[] | undefined;
+  setBoardIndex: (index: number) => void;
 }) => {
   return (
     <Select
       w={'20ch'}
       value={boardId}
       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-        selectBoard(Number(e.target.value))
+        setBoardIndex(Number(e.target.value))
       }
     >
-      {boards.map(({ id, title }) => (
-        <option value={id} key={id}>
+      {boards?.map(({ id, title }, index) => (
+        <option value={index} key={id}>
           {id}: {title}
         </option>
       ))}

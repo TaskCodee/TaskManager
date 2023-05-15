@@ -9,10 +9,9 @@ import {
   Flex,
   Spacer,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { CardInfo, ListInfo } from './App';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { ListInfo } from './lib/api';
 
 const BoardList = ({
   listInfo,
@@ -20,15 +19,9 @@ const BoardList = ({
   deleteList,
 }: {
   listInfo: ListInfo;
-  createCard: (listId: number, cardInfo?: CardInfo) => void;
-  deleteList: (id: number) => void;
+  createCard: (listId: number, title?: string, description?: string) => void;
+  deleteList: (id: number) => Promise<void>;
 }) => {
-  const [cards, setCards] = useState<CardInfo[]>(listInfo.cards);
-
-  useEffect(() => {
-    setCards(listInfo.cards);
-  }, [listInfo.cards]);
-
   return (
     <>
       <Box shadow={'md'} borderRadius={'15'} p={'1.5em'}>
@@ -52,7 +45,7 @@ const BoardList = ({
           </Menu>
         </Flex>
         <VStack w={'16em'}>
-          {cards.map((card) => (
+          {listInfo.cards.map((card) => (
             <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
