@@ -81,3 +81,8 @@ export const useCreateCard = () => {
   const { trigger } = useSWRMutation('/api/cards', sendPost);
   return { triggerCreateCard: trigger };
 };
+
+export const useDeleteCard = () => {
+  const { trigger } = useSWRMutation('/api/cards', sendDelete);
+  return { triggerDeleteCard: trigger };
+};

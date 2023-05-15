@@ -9,12 +9,15 @@ import {
   useCreateBoard,
   useCreateCard,
   useCreateList,
+  useDeleteCard,
   useDeleteList,
 } from './lib/api';
+import { BoardContext } from './BoardContext';
 
 function App() {
   const [boardIndex, setBoardIndex] = useState<number>(0);
   const { triggerDeleteList } = useDeleteList();
+  const { triggerDeleteCard } = useDeleteCard();
   const { boards, boardsMutate } = useBoards();
   const { board, boardMutate } = useBoard(
     boards ? boards[boardIndex].id : null
@@ -59,40 +62,54 @@ function App() {
     await boardMutate();
   };
 
+  const deleteCard = async (id: number) => {
+    console.log(`Delete card ${id}`);
+
+    await triggerDeleteCard({ id });
+
+    await boardMutate();
+  };
+
   return (
     <>
-      <HStack p={'1em'}>
-        <Button onClick={() => createBoard()}>
-          <SmallAddIcon />
-        </Button>
-        <BoardSelector
-          boardIndex={boardIndex}
-          boards={boards}
-          setBoardIndex={setBoardIndex}
-        />
-      </HStack>
-      {board ? (
-        <>
-          <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
-            {board.lists?.map((list) => (
-              <BoardList
-                createCard={createCard}
-                deleteList={deleteList}
-                listInfo={list}
-                key={list.id}
-              />
-            ))}
-            <Button onClick={() => createList(board.id)}>
-              <SmallAddIcon />
-            </Button>
-          </HStack>
-        </>
-      ) : (
-        <HStack>
-          <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
-          <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+      <BoardContext.Provider
+        value={{
+          board,
+          createBoard,
+          createList,
+          deleteList,
+          createCard,
+          deleteCard,
+        }}
+      >
+        <HStack p={'1em'}>
+          <Button onClick={() => createBoard()}>
+            <SmallAddIcon />
+          </Button>
+          <BoardSelector
+            boardIndex={boardIndex}
+            boards={boards}
+            setBoardIndex={setBoardIndex}
+          />
         </HStack>
-      )}
+        {board ? (
+          <>
+            <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
+              {board.lists?.map((list) => (
+                <BoardList listInfo={list} key={list.id} />
+              ))}
+              <Button onClick={() => createList(board.id)}>
+                <SmallAddIcon />
+              </Button>
+            </HStack>
+          </>
+        ) : (
+          <HStack>
+            <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+            <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+          </HStack>
+        )}
+      </BoardContext.Provider>
     </>
   );
 }

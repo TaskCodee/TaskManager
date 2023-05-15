@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { BoardContextType } from './BoardContext';
 import {
   Button,
   VStack,
@@ -12,16 +14,13 @@ import {
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { ListInfo } from './lib/api';
+import { BoardContext } from './BoardContext';
 
-const BoardList = ({
-  listInfo,
-  createCard,
-  deleteList,
-}: {
-  listInfo: ListInfo;
-  createCard: (listId: number, title?: string, description?: string) => void;
-  deleteList: (id: number) => Promise<void>;
-}) => {
+const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
+  const { createCard, deleteList } = useContext(
+    BoardContext
+  ) as BoardContextType;
+
   return (
     <>
       <Box shadow={'md'} borderRadius={'15'} p={'1.5em'}>
