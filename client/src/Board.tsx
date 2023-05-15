@@ -34,7 +34,7 @@ const Board = ({ board }: { board: BoardData }) => {
             <Button
               onClick={() => {
                 console.log('Create list');
-                listCreateMutation.mutate({ id: 0, title: 'Test card' });
+                listCreateMutation.mutate({ id: 0, title: 'Test list' });
               }}
             >
               <SmallAddIcon />
