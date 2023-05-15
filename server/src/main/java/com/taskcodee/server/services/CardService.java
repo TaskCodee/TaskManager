@@ -2,7 +2,7 @@ package com.taskcodee.server.services;
 
 import com.taskcodee.server.dto.cards.CardCreationDTO;
 import com.taskcodee.server.dto.cards.CardUpdateDTO;
-import com.taskcodee.server.dto.cards.IndexDTO;
+import com.taskcodee.server.dto.cards.CardIndexDTO;
 import com.taskcodee.server.entities.Board;
 import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.entities.BoardList;
@@ -71,44 +71,44 @@ public class CardService {
     }
 
     @Transactional
-    public BoardCard changeIndex(Long cardId, IndexDTO indexDTO) {
+    public BoardCard changeIndex(Long cardId, CardIndexDTO cardIndexDTO) {
         BoardCard boardCard = this.findById(cardId);
         BoardList boardList = boardCard.getList();
         Board board = boardList.getBoard();
-        if(indexDTO.getIndexCard() == null) {
-            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
+        if(cardIndexDTO.getIndexCard() == null) {
+            throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
         }
-        if(indexDTO.getIndexList() < 0 || indexDTO.getIndexList() > board.getLists().size()) {
-            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
+        if(cardIndexDTO.getIndexList() < 0 || cardIndexDTO.getIndexList() > board.getLists().size()) {
+            throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
         }
-        if(indexDTO.getIndexCard() < 0 || indexDTO.getIndexCard() > boardList.getCards().size()) {
-            throw new IndexOutOfBoundsException(indexDTO.getIndexCard());
+        if(cardIndexDTO.getIndexCard() < 0 || cardIndexDTO.getIndexCard() > boardList.getCards().size()) {
+            throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
         }
 
-        if(indexDTO.getIndexList() == null || board.getLists().indexOf(boardList) == indexDTO.getIndexList()) {
-            if(indexDTO.getIndexCard() == 0) {
+        if(cardIndexDTO.getIndexList() == null || board.getLists().indexOf(boardList) == cardIndexDTO.getIndexList()) {
+            if(cardIndexDTO.getIndexCard() == 0) {
                 boardCard.setPos(boardList.getCards().get(0).getPos() / 2);
             }
-            else if(indexDTO.getIndexCard() == boardList.getCards().size() - 1) {
+            else if(cardIndexDTO.getIndexCard() == boardList.getCards().size() - 1) {
                 boardCard.setPos(boardList.getCards().get(boardList.getCards().size() - 1).getPos() + 100);
             }
             else {
-                boardCard.setPos((boardList.getCards().get(indexDTO.getIndexCard()).getPos() +
-                        boardList.getCards().get(indexDTO.getIndexCard() + 1).getPos()) / 2);
+                boardCard.setPos((boardList.getCards().get(cardIndexDTO.getIndexCard()).getPos() +
+                        boardList.getCards().get(cardIndexDTO.getIndexCard() + 1).getPos()) / 2);
             }
         }
         else {
-            BoardList newBoardList = board.getLists().get(indexDTO.getIndexList());
+            BoardList newBoardList = board.getLists().get(cardIndexDTO.getIndexList());
             boardCard.setList(newBoardList);
-            if(indexDTO.getIndexCard() == 0) {
+            if(cardIndexDTO.getIndexCard() == 0) {
                 boardCard.setPos(newBoardList.getCards().get(0).getPos() / 2);
             }
-            else if(indexDTO.getIndexCard() == newBoardList.getCards().size() - 1) {
+            else if(cardIndexDTO.getIndexCard() == newBoardList.getCards().size() - 1) {
                 boardCard.setPos(newBoardList.getCards().get(newBoardList.getCards().size() - 1).getPos() + 100);
             }
             else {
-                boardCard.setPos((newBoardList.getCards().get(indexDTO.getIndexCard()).getPos() +
-                        newBoardList.getCards().get(indexDTO.getIndexCard() + 1).getPos()) / 2);
+                boardCard.setPos((newBoardList.getCards().get(cardIndexDTO.getIndexCard()).getPos() +
+                        newBoardList.getCards().get(cardIndexDTO.getIndexCard() + 1).getPos()) / 2);
             }
         }
 

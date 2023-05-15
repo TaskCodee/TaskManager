@@ -1,4 +1,4 @@
-package com.taskcodee.server.dto.cards;
+package com.taskcodee.server.dto.lists;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class IndexDTO {
+public class ListIndexDTO {
 
     private Integer indexList;
-
-    private Integer indexCard;
 }

@@ -1,9 +1,12 @@
 package com.taskcodee.server.controllers;
 
 import com.taskcodee.server.api.ApiSuccess;
+import com.taskcodee.server.dto.cards.CardIndexDTO;
 import com.taskcodee.server.dto.lists.BoardListCreationDTO;
 import com.taskcodee.server.dto.lists.BoardListDTO;
 import com.taskcodee.server.dto.lists.BoardListPutDTO;
+import com.taskcodee.server.dto.lists.ListIndexDTO;
+import com.taskcodee.server.entities.BoardCard;
 import com.taskcodee.server.entities.BoardList;
 import com.taskcodee.server.mappers.BoardListMapper;
 import com.taskcodee.server.services.BoardListService;
@@ -39,6 +42,13 @@ public class BoardListController {
     public ResponseEntity<Object> addCardList(@PathVariable Long id, @RequestBody BoardListCreationDTO boardListCreationDTO) {
         BoardList boardList = boardListService.save(id, boardListCreationDTO);
         ApiSuccess apiSuccess = new ApiSuccess("The list is created!", boardListMapper.mapToBoardListDTO(boardList));
+        return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/lists/{id}/move_to")
+    public ResponseEntity<Object> changeOrder(@PathVariable Long id, @RequestBody ListIndexDTO listIndexDTO) {
+        BoardList boardList = boardListService.changeIndex(id, listIndexDTO);
+        ApiSuccess apiSuccess = new ApiSuccess("The position is changed!", boardListMapper.mapToBoardListDTO(boardList));
         return new ResponseEntity<>(apiSuccess, HttpStatus.CREATED);
     }
 
