@@ -1,13 +1,19 @@
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { HStack, Button, Skeleton } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { BoardData, ListInfo, createList } from './lib/api';
+import { BoardData, ListInfo, createList, deleteList } from './lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const Board = ({ board }: { board: BoardData }) => {
   const queryClient = useQueryClient();
-  const listMutation = useMutation({
+
+  const listCreateMutation = useMutation({
     mutationFn: (newList: ListInfo) => createList(board.id, newList),
+    onSuccess: () => queryClient.invalidateQueries(['board']),
+  });
+
+  const listDeleteMutation = useMutation({
+    mutationFn: (listId: number | undefined) => deleteList(listId),
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
@@ -17,12 +23,18 @@ const Board = ({ board }: { board: BoardData }) => {
         {board ? (
           <>
             {board.lists.map((list) => (
-              <BoardList list={list} key={list.id} />
+              <BoardList
+                list={list}
+                key={list.id}
+                deleteList={(listId: number) =>
+                  listDeleteMutation.mutate(listId)
+                }
+              />
             ))}
             <Button
               onClick={() => {
                 console.log('Create list');
-                listMutation.mutate({ id: 0, title: 'Test card' });
+                listCreateMutation.mutate({ id: 0, title: 'Test card' });
               }}
             >
               <SmallAddIcon />

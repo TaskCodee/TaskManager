@@ -53,6 +53,14 @@ export const createList = async (
   return data;
 };
 
+export const deleteList = async (listId: number | undefined) => {
+  if (listId == null) throw new Error('list id is null');
+  const res = await fetch(`/api/lists/${listId}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error(res.statusText);
+};
+
 export const createCard = async (
   listId: number | undefined,
   cardInfo: CardInfo

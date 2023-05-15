@@ -14,9 +14,15 @@ import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { CardInfo, ListData, createCard } from './lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const BoardList = ({ list }: { list: ListData }) => {
+const BoardList = ({
+  list,
+  deleteList,
+}: {
+  list: ListData;
+  deleteList: (listId: number) => void;
+}) => {
   const queryClient = useQueryClient();
-  const cardMutation = useMutation({
+  const cardCreateMutation = useMutation({
     mutationFn: (newCard: CardInfo) => createCard(list.id, newCard),
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
@@ -37,7 +43,14 @@ const BoardList = ({ list }: { list: ListData }) => {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem>Delete</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  console.log('Delete list');
+                  deleteList(list.id);
+                }}
+              >
+                Delete
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -52,7 +65,11 @@ const BoardList = ({ list }: { list: ListData }) => {
           mt={'0.5em'}
           onClick={() => {
             console.log('Create card');
-            cardMutation.mutate({ id: 0, title: 'Test card', description: '' });
+            cardCreateMutation.mutate({
+              id: 0,
+              title: 'Test card',
+              description: '',
+            });
           }}
         >
           <AddIcon />
