@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { ListInfo } from './lib/api';
+import { ListData } from './lib/api';
 
-const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
+const BoardList = ({ list }: { list: ListData }) => {
   return (
     <>
       <Box shadow={'md'} borderRadius={'15'}>
@@ -23,7 +23,7 @@ const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
           mb={'0.5em'}
           align={'center'}
         >
-          <Box>{listInfo.title}</Box>
+          <Box>{list.title}</Box>
           <Spacer />
           <Menu>
             <MenuButton variant={'ghost'} as={Button}>
@@ -35,11 +35,18 @@ const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
           </Menu>
         </Flex>
         <VStack w={'16em'}>
-          {listInfo.cards?.map((card) => (
+          {list.cards.map((card) => (
             <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
-        <Button variant={'outline'} w={'100%'} mt={'0.5em'}>
+        <Button
+          variant={'outline'}
+          w={'100%'}
+          mt={'0.5em'}
+          onClick={() => {
+            console.log('Create card');
+          }}
+        >
           <AddIcon />
         </Button>
       </Box>

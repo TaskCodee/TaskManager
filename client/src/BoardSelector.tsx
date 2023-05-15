@@ -7,8 +7,8 @@ const BoardSelector = ({
   boards,
   setBoardIndex,
 }: {
-  boardIndex?: number;
-  boards: BoardInfo[] | undefined;
+  boardIndex: number;
+  boards: BoardInfo[];
   setBoardIndex: (index: number) => void;
 }) => {
   return (
@@ -19,7 +19,7 @@ const BoardSelector = ({
         setBoardIndex(Number(e.target.value))
       }
     >
-      {boards?.map(({ id, title }, index) => (
+      {boards.map(({ id, title }, index) => (
         <option value={index} key={id}>
           {id}: {title}
         </option>
