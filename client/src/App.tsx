@@ -1,124 +1,33 @@
-import { Button, HStack, Skeleton } from '@chakra-ui/react';
-import BoardList from './BoardList';
-import { useEffect, useState } from 'react';
+import { Box, Button, HStack, Skeleton } from '@chakra-ui/react';
+import { useState } from 'react';
 import BoardSelector from './BoardSelector';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import {
-  CardInfo,
-  useBoard,
-  useBoards,
-  useCreateBoard,
-  useCreateCard,
-  useCreateList,
-  useDeleteCard,
-  useDeleteList,
-  useEditCard,
-} from './lib/api';
-import { BoardContext } from './BoardContext';
+import Board from './Board';
+import useSWR from 'swr';
+import { BoardInfo, fetcher } from './lib/api';
 
 function App() {
   const [boardIndex, setBoardIndex] = useState<number>(0);
-  const { triggerDeleteList } = useDeleteList();
-  const { triggerDeleteCard } = useDeleteCard();
-  const { triggerEditCard } = useEditCard();
-  const { boards, boardsMutate } = useBoards();
-  const { board, boardMutate } = useBoard(
-    boards ? boards[boardIndex].id : null
-  );
-
-  const { triggerCreateBoard } = useCreateBoard();
-  const { triggerCreateList } = useCreateList();
-  const { triggerCreateCard } = useCreateCard();
-
-  useEffect(() => {
-    if (boards) setBoardIndex(boards?.length - 1);
-  }, [boards]);
-
-  const createBoard = async (
-    title = Math.random().toString(36).slice(2, 5)
-  ) => {
-    triggerCreateBoard({ userId: 1, title });
-
-    await boardsMutate();
-    await boardMutate();
-  };
-
-  const createList = async (boardId: number, title = 'Test list') => {
-    await triggerCreateList({ boardId, title });
-
-    await boardMutate();
-  };
-
-  const deleteList = async (id: number) => {
-    await triggerDeleteList({ id });
-
-    await boardMutate();
-  };
-
-  const createCard = async (
-    listId: number,
-    title = 'Test card',
-    description = 'Test card'
-  ) => {
-    await triggerCreateCard({ cardListId: listId, title, description });
-
-    await boardMutate();
-  };
-
-  const editCard = async (listId: number, cardInfo: CardInfo) => {
-    await triggerEditCard({ cardListId: listId, ...cardInfo });
-
-    await boardMutate();
-  };
-
-  const deleteCard = async (id: number) => {
-    await triggerDeleteCard({ id });
-
-    await boardMutate();
-  };
+  const { data: boards } = useSWR<BoardInfo[]>('/api/boards', fetcher);
 
   return (
-    <>
-      <BoardContext.Provider
-        value={{
-          board,
-          createBoard,
-          createList,
-          deleteList,
-          createCard,
-          editCard,
-          deleteCard,
-        }}
-      >
-        <HStack p={'1em'}>
-          <Button onClick={() => createBoard()}>
-            <SmallAddIcon />
-          </Button>
-          <BoardSelector
-            boardIndex={boardIndex}
-            boards={boards}
-            setBoardIndex={setBoardIndex}
-          />
-        </HStack>
-        {board ? (
-          <>
-            <HStack align={'flex-start'} gap={'1em'} p={'1em'}>
-              {board.lists?.map((list) => (
-                <BoardList listInfo={list} key={list.id} />
-              ))}
-              <Button onClick={() => createList(board.id)}>
-                <SmallAddIcon />
-              </Button>
-            </HStack>
-          </>
-        ) : (
+    <Box p={'1em'}>
+      <>
+        <Skeleton isLoaded={!!boards}>
           <HStack>
-            <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
-            <Skeleton borderRadius={'md'} m={'1em'} w={'16em'} h={'20em'} />
+            <Button>
+              <SmallAddIcon />
+            </Button>
+            <BoardSelector
+              boardIndex={boardIndex}
+              boards={boards}
+              setBoardIndex={setBoardIndex}
+            />
           </HStack>
-        )}
-      </BoardContext.Provider>
-    </>
+          <Box mt={'1em'}>{boards && <Board board={boards[0]} />}</Box>
+        </Skeleton>
+      </>
+    </Box>
   );
 }
 

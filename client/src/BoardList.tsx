@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { BoardContextType } from './BoardContext';
 import {
   Button,
   VStack,
@@ -13,21 +11,12 @@ import {
 } from '@chakra-ui/react';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { CardInfo, ListInfo } from './lib/api';
-import { BoardContext } from './BoardContext';
+import { ListInfo } from './lib/api';
 
 const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
-  const { createCard, deleteList, editCard } = useContext(
-    BoardContext
-  ) as BoardContextType;
-
-  const handleEditCard = (cardInfo: CardInfo) => {
-    editCard(listInfo.id, cardInfo);
-  };
-
   return (
     <>
-      <Box shadow={'md'} borderRadius={'15'} p={'1.5em'}>
+      <Box shadow={'md'} borderRadius={'15'}>
         <Flex
           fontWeight={'semibold'}
           textAlign={'start'}
@@ -41,27 +30,16 @@ const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
               <ChevronDownIcon />
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => deleteList(listInfo.id)}>
-                Delete
-              </MenuItem>
+              <MenuItem>Delete</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
         <VStack w={'16em'}>
-          {listInfo.cards.map((card) => (
-            <BoardCard
-              cardInfo={card}
-              onEditCard={handleEditCard}
-              key={card.id}
-            />
+          {listInfo.cards?.map((card) => (
+            <BoardCard cardInfo={card} key={card.id} />
           ))}
         </VStack>
-        <Button
-          variant={'outline'}
-          w={'100%'}
-          mt={'0.5em'}
-          onClick={() => createCard(listInfo.id)}
-        >
+        <Button variant={'outline'} w={'100%'} mt={'0.5em'}>
           <AddIcon />
         </Button>
       </Box>
