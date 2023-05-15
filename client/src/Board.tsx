@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const Board = ({ board }: { board: BoardData }) => {
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const listMutation = useMutation({
     mutationFn: (newList: ListInfo) => createList(board.id, newList),
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
@@ -22,7 +22,7 @@ const Board = ({ board }: { board: BoardData }) => {
             <Button
               onClick={() => {
                 console.log('Create list');
-                mutation.mutate({ id: 0, title: 'Test card' });
+                listMutation.mutate({ id: 0, title: 'Test card' });
               }}
             >
               <SmallAddIcon />

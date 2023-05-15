@@ -21,6 +21,22 @@ export const getBoard = async (id: number | undefined) => {
   return data;
 };
 
+export const createBoard = async (
+  userId: number | undefined,
+  boardInfo: BoardInfo
+) => {
+  if (userId == null) throw new Error('user id is null');
+  const res = await fetch(`/api/users/${userId}/boards`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(boardInfo),
+  });
+  if (!res.ok) throw new Error(res.statusText);
+
+  const data: BoardInfo = (await res.json()).data;
+  return data;
+};
+
 export const createList = async (
   boardId: number | undefined,
   listInfo: ListInfo

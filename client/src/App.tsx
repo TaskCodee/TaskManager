@@ -3,22 +3,38 @@ import { useState } from 'react';
 import BoardSelector from './BoardSelector';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import Board from './Board';
-import { getBoard, getBoards as getBoards } from './lib/api';
-import { useQuery } from '@tanstack/react-query';
+import {
+  BoardInfo,
+  createBoard,
+  getBoard,
+  getBoards as getBoards,
+} from './lib/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 function App() {
+  const userId = 1;
   const [boardIndex, setBoardIndex] = useState<number>(0);
+
+  const queryClient = useQueryClient();
+
+  const boardMutation = useMutation({
+    mutationFn: (newBoard: BoardInfo) => createBoard(userId, newBoard),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['boards']);
+      queryClient.invalidateQueries(['board']);
+    },
+  });
 
   const { data: boards } = useQuery({
     queryKey: ['boards'],
     queryFn: getBoards,
   });
 
-  const boardId = boards?.[0].id;
+  const boardId = boards?.[boardIndex].id;
 
   const { data: board } = useQuery({
-    queryKey: ['board'] as const,
-    queryFn: () => getBoard(boardId),
+    queryKey: ['board', boardId] as const,
+    queryFn: ({ queryKey }) => getBoard(queryKey[1]),
     enabled: boardId != null,
   });
 
@@ -29,12 +45,20 @@ function App() {
           {boards && (
             <>
               <HStack>
-                <Button>
+                <Button
+                  onClick={() => {
+                    console.log('Created board');
+                    boardMutation.mutate({
+                      id: 0,
+                      title: Math.random().toString(36).substr(2, 5),
+                    });
+                  }}
+                >
                   <SmallAddIcon />
                 </Button>
                 <BoardSelector
-                  boardIndex={boardIndex}
                   boards={boards}
+                  boardIndex={boardIndex}
                   setBoardIndex={setBoardIndex}
                 />
               </HStack>
