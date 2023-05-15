@@ -3,21 +3,23 @@ import { useState } from 'react';
 import BoardSelector from './BoardSelector';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import Board from './Board';
-import { BoardInfo } from './lib/api';
+import { getBoard, getBoards as getBoards } from './lib/api';
 import { useQuery } from '@tanstack/react-query';
 
 function App() {
   const [boardIndex, setBoardIndex] = useState<number>(0);
 
-  const fetchBoards = async () => {
-    const res = await fetch('/api/boards');
-    const data = await res.json();
-    return data;
-  };
-
-  const { data: boards } = useQuery<BoardInfo[]>({
+  const { data: boards } = useQuery({
     queryKey: ['boards'],
-    queryFn: fetchBoards,
+    queryFn: getBoards,
+  });
+
+  const boardId = boards?.[0].id;
+
+  const { data: board } = useQuery({
+    queryKey: ['board'] as const,
+    queryFn: () => getBoard(boardId),
+    enabled: boardId != null,
   });
 
   return (
@@ -36,9 +38,7 @@ function App() {
                   setBoardIndex={setBoardIndex}
                 />
               </HStack>
-              <Box mt={'1em'}>
-                {boards[boardIndex] && <Board boardInfo={boards[boardIndex]} />}
-              </Box>
+              <Box mt={'1em'}>{board && <Board board={board} />}</Box>
             </>
           )}
         </Skeleton>

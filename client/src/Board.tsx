@@ -1,19 +1,14 @@
-import { BoardData, BoardInfo } from './lib/api';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { HStack, Button, Skeleton } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useQuery } from '@tanstack/react-query';
+import { BoardData, ListInfo, createList } from './lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const Board = ({ boardInfo }: { boardInfo: BoardInfo }) => {
-  const fetchBoard = async () => {
-    const res = await fetch(`/api/boards/${boardInfo.id}`);
-    const data = await res.json();
-    return data;
-  };
-
-  const { data: board } = useQuery<BoardData>({
-    queryKey: ['board'],
-    queryFn: fetchBoard,
+const Board = ({ board }: { board: BoardData }) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (newList: ListInfo) => createList(board.id, newList),
+    onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
   return (
@@ -24,7 +19,12 @@ const Board = ({ boardInfo }: { boardInfo: BoardInfo }) => {
             {board.lists.map((list) => (
               <BoardList list={list} key={list.id} />
             ))}
-            <Button onClick={() => console.log('Create list')}>
+            <Button
+              onClick={() => {
+                console.log('Create list');
+                mutation.mutate({ id: 0, title: 'Test card' });
+              }}
+            >
               <SmallAddIcon />
             </Button>
           </>

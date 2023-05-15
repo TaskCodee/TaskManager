@@ -11,9 +11,16 @@ import {
 } from '@chakra-ui/react';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { ListData } from './lib/api';
+import { CardInfo, ListData, createCard } from './lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const BoardList = ({ list }: { list: ListData }) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (newCard: CardInfo) => createCard(list.id, newCard),
+    onSuccess: () => queryClient.invalidateQueries(['board']),
+  });
+
   return (
     <>
       <Box shadow={'md'} borderRadius={'15'}>
@@ -45,6 +52,7 @@ const BoardList = ({ list }: { list: ListData }) => {
           mt={'0.5em'}
           onClick={() => {
             console.log('Create card');
+            mutation.mutate({ id: 0, title: 'Test card', description: '' });
           }}
         >
           <AddIcon />
