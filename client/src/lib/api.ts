@@ -4,6 +4,8 @@ export type ListInfo = { id: number; title: string };
 export type ListData = ListInfo & { cards: CardInfo[] };
 export type CardInfo = { id: number; title: string; description: string };
 
+export const randId = () => Math.floor(Math.random() * 10000);
+
 export const getBoards = async () => {
   const res = await fetch('/api/boards');
   if (!res.ok) throw new Error(res.statusText);

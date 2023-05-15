@@ -11,19 +11,43 @@ import {
 } from '@chakra-ui/react';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { CardInfo, ListData, createCard } from './lib/api';
+import { BoardData, CardInfo, ListData, createCard, randId } from './lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
 const BoardList = ({
   list,
+  boardId,
   deleteList,
+  dragHandleProps,
 }: {
   list: ListData;
+  boardId: number;
   deleteList: (listId: number) => void;
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
 }) => {
   const queryClient = useQueryClient();
   const cardCreateMutation = useMutation({
     mutationFn: (newCard: CardInfo) => createCard(list.id, newCard),
+    onMutate: (newCard) => {
+      const prevBoard = queryClient.getQueryData(['board', boardId]);
+      queryClient.setQueryData(
+        ['board', boardId],
+        (old: BoardData | undefined) => {
+          if (!old) return old;
+          const newBoard = { ...old };
+          const listIndex = newBoard.lists.findIndex((l) => l.id === list.id);
+          newBoard.lists[listIndex].cards = [
+            ...newBoard.lists[listIndex].cards,
+            newCard,
+          ];
+          console.log({ old, newBoard });
+
+          return newBoard;
+        }
+      );
+      return { prevBoard };
+    },
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
@@ -35,6 +59,7 @@ const BoardList = ({
           textAlign={'start'}
           mb={'0.5em'}
           align={'center'}
+          {...dragHandleProps}
         >
           <Box>{list.title}</Box>
           <Spacer />
@@ -66,7 +91,7 @@ const BoardList = ({
           onClick={() => {
             console.log('Create card');
             cardCreateMutation.mutate({
-              id: 0,
+              id: randId(),
               title: 'Test card',
               description: '',
             });
