@@ -17,14 +17,6 @@ function App() {
 
   const queryClient = useQueryClient();
 
-  const boardMutation = useMutation({
-    mutationFn: (newBoard: BoardInfo) => createBoard(userId, newBoard),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['boards']);
-      queryClient.invalidateQueries(['board']);
-    },
-  });
-
   const { data: boards } = useQuery({
     queryKey: ['boards'],
     queryFn: getBoards,
@@ -36,6 +28,15 @@ function App() {
     queryKey: ['board', boardId] as const,
     queryFn: ({ queryKey }) => getBoard(queryKey[1]),
     enabled: boardId != null,
+  });
+
+  const boardMutation = useMutation({
+    mutationFn: (newBoard: BoardInfo) => createBoard(userId, newBoard),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['boards']);
+      if (boards) setBoardIndex(boards.length);
+      queryClient.invalidateQueries(['board']);
+    },
   });
 
   return (
