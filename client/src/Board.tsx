@@ -1,19 +1,20 @@
-import { BoardData } from './lib/api';
+import { BoardData, BoardInfo } from './lib/api';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { HStack, Button, Skeleton } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-const Board = ({ boardInfo }: { boardInfo: BoardData }) => {
-  const [board, setBoard] = useState<BoardData>();
+const Board = ({ boardInfo }: { boardInfo: BoardInfo }) => {
+  const fetchBoard = async () => {
+    const res = await fetch(`/api/boards/${boardInfo.id}`);
+    const data = await res.json();
+    return data;
+  };
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`/api/boards/${boardInfo.id}`);
-      const data = await res.json();
-      setBoard(data);
-    })();
-  }, [boardInfo.id]);
+  const { data: board } = useQuery<BoardData>({
+    queryKey: ['board'],
+    queryFn: fetchBoard,
+  });
 
   return (
     <>
