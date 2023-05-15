@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { BoardInfo } from './lib/api';
+import { BoardInfo, CardInfo } from './lib/api';
 
 export type BoardContextType = {
   board?: BoardInfo;
@@ -7,6 +7,7 @@ export type BoardContextType = {
   createList: (boardId: number, title?: string) => void;
   deleteList: (id: number) => void;
   createCard: (listId: number, title?: string, description?: string) => void;
+  editCard: (listId: number, cardInfo: CardInfo) => void;
   deleteCard: (id: number) => void;
 };
 

@@ -29,6 +29,13 @@ const sendPost = (url: RequestInfo, { arg }: { arg: unknown }) =>
     body: JSON.stringify(arg),
   });
 
+const sendPut = (url: RequestInfo, { arg }: { arg: any }) =>
+  fetch(`${url}/${arg.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(arg),
+  });
+
 const sendDelete = (url: RequestInfo, { arg }: { arg: { id: number } }) =>
   fetch(`${url}/${arg.id}`, {
     method: 'DELETE',
@@ -80,6 +87,11 @@ export const useDeleteList = () => {
 export const useCreateCard = () => {
   const { trigger } = useSWRMutation('/api/cards', sendPost);
   return { triggerCreateCard: trigger };
+};
+
+export const useEditCard = () => {
+  const { trigger } = useSWRMutation('/api/cards', sendPut);
+  return { triggerEditCard: trigger };
 };
 
 export const useDeleteCard = () => {

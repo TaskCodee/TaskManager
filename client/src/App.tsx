@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import BoardSelector from './BoardSelector';
 import { SmallAddIcon } from '@chakra-ui/icons';
 import {
+  CardInfo,
   useBoard,
   useBoards,
   useCreateBoard,
@@ -11,6 +12,7 @@ import {
   useCreateList,
   useDeleteCard,
   useDeleteList,
+  useEditCard,
 } from './lib/api';
 import { BoardContext } from './BoardContext';
 
@@ -18,6 +20,7 @@ function App() {
   const [boardIndex, setBoardIndex] = useState<number>(0);
   const { triggerDeleteList } = useDeleteList();
   const { triggerDeleteCard } = useDeleteCard();
+  const { triggerEditCard } = useEditCard();
   const { boards, boardsMutate } = useBoards();
   const { board, boardMutate } = useBoard(
     boards ? boards[boardIndex].id : null
@@ -62,9 +65,13 @@ function App() {
     await boardMutate();
   };
 
-  const deleteCard = async (id: number) => {
-    console.log(`Delete card ${id}`);
+  const editCard = async (listId: number, cardInfo: CardInfo) => {
+    await triggerEditCard({ cardListId: listId, ...cardInfo });
 
+    await boardMutate();
+  };
+
+  const deleteCard = async (id: number) => {
     await triggerDeleteCard({ id });
 
     await boardMutate();
@@ -79,6 +86,7 @@ function App() {
           createList,
           deleteList,
           createCard,
+          editCard,
           deleteCard,
         }}
       >

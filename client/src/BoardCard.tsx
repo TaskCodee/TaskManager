@@ -4,7 +4,13 @@ import { CardInfo } from './lib/api';
 import { useEffect, useState, useContext } from 'react';
 import { BoardContext, BoardContextType } from './BoardContext';
 
-const BoardCard = ({ cardInfo }: { cardInfo: CardInfo }) => {
+const BoardCard = ({
+  cardInfo,
+  onEditCard,
+}: {
+  cardInfo: CardInfo;
+  onEditCard: (cardInfo: CardInfo) => void;
+}) => {
   const { deleteCard } = useContext(BoardContext) as BoardContextType;
   const [title, setTitle] = useState('');
 
@@ -13,12 +19,12 @@ const BoardCard = ({ cardInfo }: { cardInfo: CardInfo }) => {
   }, [cardInfo]);
 
   const handleChange = (value: string) => {
-    console.log(value);
     setTitle(value);
   };
 
   const handleBlur = () => {
-    if (!title.trim().length) deleteCard(Number(cardInfo.id));
+    if (!title.trim().length) return deleteCard(Number(cardInfo.id));
+    onEditCard({ ...cardInfo, title });
   };
 
   return (

@@ -13,13 +13,17 @@ import {
 } from '@chakra-ui/react';
 import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { ListInfo } from './lib/api';
+import { CardInfo, ListInfo } from './lib/api';
 import { BoardContext } from './BoardContext';
 
 const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
-  const { createCard, deleteList } = useContext(
+  const { createCard, deleteList, editCard } = useContext(
     BoardContext
   ) as BoardContextType;
+
+  const handleEditCard = (cardInfo: CardInfo) => {
+    editCard(listInfo.id, cardInfo);
+  };
 
   return (
     <>
@@ -45,7 +49,11 @@ const BoardList = ({ listInfo }: { listInfo: ListInfo }) => {
         </Flex>
         <VStack w={'16em'}>
           {listInfo.cards.map((card) => (
-            <BoardCard cardInfo={card} key={card.id} />
+            <BoardCard
+              cardInfo={card}
+              onEditCard={handleEditCard}
+              key={card.id}
+            />
           ))}
         </VStack>
         <Button
