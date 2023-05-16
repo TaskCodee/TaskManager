@@ -13,7 +13,13 @@ import BoardCard from './BoardCard';
 import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { BoardData, CardInfo, ListData, createCard, randId } from './lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd';
 
 const BoardList = ({
   list,
@@ -51,8 +57,12 @@ const BoardList = ({
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
+  const onDragEnd: OnDragEndResponder = (result) => {
+    console.log(result);
+  };
+
   return (
-    <>
+    <DragDropContext onDragEnd={onDragEnd}>
       <Box shadow={'md'} borderRadius={'15'}>
         <Flex
           fontWeight={'semibold'}
@@ -79,11 +89,34 @@ const BoardList = ({
             </MenuList>
           </Menu>
         </Flex>
-        <VStack w={'16em'}>
-          {list.cards.map((card) => (
-            <BoardCard cardInfo={card} key={card.id} />
-          ))}
-        </VStack>
+
+        <Droppable droppableId={'list'}>
+          {(provided) => (
+            <VStack
+              w={'16em'}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {list.cards.map((card, index) => (
+                <Draggable
+                  index={index}
+                  draggableId={card.id.toString()}
+                  key={card.id}
+                >
+                  {(provided) => (
+                    <Box ref={provided.innerRef} {...provided.draggableProps}>
+                      <BoardCard
+                        cardInfo={card}
+                        dragHandleProps={provided.dragHandleProps}
+                      />
+                    </Box>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </VStack>
+          )}
+        </Droppable>
         <Button
           variant={'outline'}
           w={'100%'}
@@ -100,7 +133,7 @@ const BoardList = ({
           <AddIcon />
         </Button>
       </Box>
-    </>
+    </DragDropContext>
   );
 };
 

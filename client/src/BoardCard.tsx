@@ -1,9 +1,24 @@
-import { Card, CardBody, Editable, EditablePreview } from '@chakra-ui/react';
+import {
+  Box,
+  Card,
+  CardBody,
+  Editable,
+  EditablePreview,
+} from '@chakra-ui/react';
 import AutoResizeTextarea from './AutoResizeTextarea';
 import { CardInfo } from './lib/api';
 import { useEffect, useState } from 'react';
+import { DragHandleIcon } from '@chakra-ui/icons';
+import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
-const BoardCard = ({ cardInfo }: { cardInfo: CardInfo }) => {
+const BoardCard = ({
+  cardInfo,
+  dragHandleProps,
+}: {
+  cardInfo: CardInfo;
+
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
+}) => {
   const [title, setTitle] = useState('');
 
   useEffect(() => {
@@ -15,8 +30,11 @@ const BoardCard = ({ cardInfo }: { cardInfo: CardInfo }) => {
   };
 
   return (
-    <Card w={'16em'} key={cardInfo.id}>
+    <Card w={'16em'}>
       <CardBody textAlign={'start'}>
+        <Box {...dragHandleProps}>
+          <DragHandleIcon />
+        </Box>
         <Editable value={title} onChange={handleChange}>
           <EditablePreview />
           <AutoResizeTextarea />
