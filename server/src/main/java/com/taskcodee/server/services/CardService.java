@@ -75,14 +75,15 @@ public class CardService {
         BoardCard boardCard = this.findById(cardId);
         BoardList boardList = boardCard.getList();
         Board board = boardList.getBoard();
-        if(cardIndexDTO.getIndexCard() == null) {
+        if(cardIndexDTO.getIndexCard() == null ||
+                cardIndexDTO.getIndexCard() < 0 ||
+                cardIndexDTO.getIndexCard() > board.getLists().get(cardIndexDTO.getIndexList()).getCards().size()) {
             throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
         }
-        if(cardIndexDTO.getIndexList() < 0 || cardIndexDTO.getIndexList() > board.getLists().size()) {
-            throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
-        }
-        if(cardIndexDTO.getIndexCard() < 0 || cardIndexDTO.getIndexCard() > boardList.getCards().size()) {
-            throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
+        if(cardIndexDTO.getIndexList() != null) {
+            if(cardIndexDTO.getIndexList() < 0 || cardIndexDTO.getIndexList() > board.getLists().size()) {
+                throw new IndexOutOfBoundsException(cardIndexDTO.getIndexCard());
+            }
         }
 
         if(cardIndexDTO.getIndexList() == null || board.getLists().indexOf(boardList) == cardIndexDTO.getIndexList()) {
@@ -103,12 +104,12 @@ public class CardService {
             if(cardIndexDTO.getIndexCard() == 0) {
                 boardCard.setPos(newBoardList.getCards().get(0).getPos() / 2);
             }
-            else if(cardIndexDTO.getIndexCard() == newBoardList.getCards().size() - 1) {
+            else if(cardIndexDTO.getIndexCard() == newBoardList.getCards().size()) {
                 boardCard.setPos(newBoardList.getCards().get(newBoardList.getCards().size() - 1).getPos() + 100);
             }
             else {
-                boardCard.setPos((newBoardList.getCards().get(cardIndexDTO.getIndexCard()).getPos() +
-                        newBoardList.getCards().get(cardIndexDTO.getIndexCard() + 1).getPos()) / 2);
+                boardCard.setPos((newBoardList.getCards().get(cardIndexDTO.getIndexCard() - 1).getPos() +
+                        newBoardList.getCards().get(cardIndexDTO.getIndexCard()).getPos()) / 2);
             }
         }
 
