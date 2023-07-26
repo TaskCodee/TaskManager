@@ -1,7 +1,14 @@
 import { SmallAddIcon } from '@chakra-ui/icons';
 import { HStack, Button, Skeleton, Box } from '@chakra-ui/react';
 import BoardList from './BoardList';
-import { BoardData, ListInfo, createList, deleteList, randId } from './lib/api';
+import {
+  BoardData,
+  ListInfo,
+  createList,
+  deleteList,
+  moveList,
+  randId,
+} from './lib/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   DragDropContext,
@@ -10,6 +17,7 @@ import {
   OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import { useCallback } from 'react';
+import { produce } from 'immer';
 
 const Board = ({ board }: { board: BoardData }) => {
   const queryClient = useQueryClient();
@@ -17,26 +25,87 @@ const Board = ({ board }: { board: BoardData }) => {
   const listCreateMutation = useMutation({
     mutationFn: (newList: ListInfo) => createList(board.id, newList),
     onMutate: (newList) => {
-      const prevBoard = queryClient.getQueryData(['board', board.id]);
+      const prevBoard: BoardData | undefined = queryClient.getQueryData([
+        'board',
+        board.id,
+      ]);
       queryClient.setQueryData(
         ['board', board.id],
-        (old: BoardData | undefined) =>
-          old
-            ? { ...old, lists: [...old.lists, { ...newList, cards: [] }] }
-            : old
+        produce(prevBoard, (draft) => {
+          if (!draft) return;
+          draft.lists.push({ ...newList, cards: [] });
+        })
       );
       return { prevBoard };
+    },
+    onError: (_err, _newList, context) => {
+      queryClient.setQueriesData(['board', board.id], context?.prevBoard);
     },
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
   const listDeleteMutation = useMutation({
     mutationFn: (listId: number | undefined) => deleteList(listId),
+    onMutate: (listId) => {
+      const prevBoard: BoardData | undefined = queryClient.getQueryData([
+        'board',
+        board.id,
+      ]);
+      queryClient.setQueryData(
+        ['board', board.id],
+        produce(prevBoard, (draft) => {
+          if (!draft) return;
+          const index = draft.lists.findIndex((l) => {
+            l.id === listId;
+          });
+          if (index !== -1) draft.lists.splice(index, 1);
+        })
+      );
+      return { prevBoard };
+    },
+    onSuccess: () => queryClient.invalidateQueries(['board']),
+  });
+
+  const listMoveMutation = useMutation({
+    mutationFn: ({
+      listId,
+      destination,
+    }: {
+      listId: number;
+      destination: { listIndex: number };
+    }) => moveList(listId, destination),
+    onMutate: ({ listId, destination }) => {
+      const prevBoard: BoardData | undefined = queryClient.getQueryData([
+        'board',
+        board.id,
+      ]);
+      queryClient.setQueryData(
+        ['board', board.id],
+        produce(prevBoard, (draft) => {
+          if (!draft) return;
+          const listIndex = draft.lists.findIndex((l) => l.id === listId);
+          console.log(draft.lists);
+          const list = draft.lists[listIndex];
+          console.log(list);
+          draft.lists.splice(listIndex, 1);
+          draft.lists.splice(destination.listIndex, 0, list);
+        })
+      );
+      return { prevBoard };
+    },
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
   const onDragEnd: OnDragEndResponder = useCallback((result) => {
-    console.log('Drop end: ', result);
+    console.log('List drag: ', result);
+    console.log(`${result.source.index} -> ${result.destination?.index}`);
+    const listId = Number(result.draggableId);
+    console.log({ listId });
+
+    const destListIndex = result.destination?.index;
+    if (!destListIndex) return;
+    const destination = { listIndex: destListIndex };
+    listMoveMutation.mutate({ listId, destination });
   }, []);
 
   return (

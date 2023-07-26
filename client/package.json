@@ -16,11 +16,13 @@
     "@emotion/styled": "^11.10.6",
     "@tanstack/react-query": "^4.29.5",
     "framer-motion": "^10.12.4",
+    "immer": "^10.0.2",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
-    "react-textarea-autosize": "^8.4.1"
+    "react-textarea-autosize": "^8.4.1",
+    "use-immer": "^0.9.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.4",

@@ -63,6 +63,18 @@ export const deleteList = async (listId: number | undefined) => {
   if (!res.ok) throw new Error(res.statusText);
 };
 
+export const moveList = async (
+  listId: number,
+  destination: { listIndex: number }
+) => {
+  const res = await fetch(`/api/lists/${listId}/move_to`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ indexList: destination.listIndex }),
+  });
+  if (!res.ok) throw new Error(res.statusText);
+};
+
 export const createCard = async (
   listId: number | undefined,
   cardInfo: CardInfo
@@ -77,4 +89,19 @@ export const createCard = async (
 
   const data: CardInfo = (await res.json()).data;
   return data;
+};
+
+export const moveCard = async (
+  cardId: number,
+  destination: { listIndex: number; cardIndex: number }
+) => {
+  const res = await fetch(`/api/cards/${cardId}/move_to`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      indexList: destination.listIndex,
+      indexCard: destination.cardIndex,
+    }),
+  });
+  if (!res.ok) throw new Error(res.statusText);
 };
