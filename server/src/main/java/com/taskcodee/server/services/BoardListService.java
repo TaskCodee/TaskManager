@@ -73,7 +73,7 @@ public class BoardListService {
         if(listIndexDTO.getIndexList() == 0) {
             boardList.setPos(board.getLists().get(0).getPos() / 2);
         }
-        else if(listIndexDTO.getIndexList() == boardList.getCards().size() - 1) {
+        else if(listIndexDTO.getIndexList() == board.getLists().size() - 1) {
             boardList.setPos(board.getLists().get(board.getLists().size() - 1).getPos() + 100);
         }
         else {
