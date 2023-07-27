@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardListService {
@@ -37,12 +38,12 @@ public class BoardListService {
     }
 
     public Double maxCardPositionFromBoardListById(Long id) {
-        return boardListRepository.maxCardPositionFromBoardListById(id);
+        Optional<Double> res = boardListRepository.maxCardPositionFromBoardListById(id);
+        return res.orElse(0.0);
     }
 
     @Transactional
     public BoardList save(Long boardId, BoardListCreationDTO boardListCreationDTO) {
-        //Обработать ситуацию, если у доски вообще не будет листов
         Double maxPosition = boardService.maxListPositionFromBoardById(boardId);
 
         BoardList boardList = new BoardList();

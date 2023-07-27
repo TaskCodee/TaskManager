@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -38,7 +39,8 @@ public class BoardService {
     }
 
     public Double maxListPositionFromBoardById(Long id) {
-        return boardRepository.maxListPositionFromBoardById(id);
+        Optional<Double> res = boardRepository.maxListPositionFromBoardById(id);
+        return res.orElse(0.0);
     }
 
     public Board getReferenceById(Long id) {

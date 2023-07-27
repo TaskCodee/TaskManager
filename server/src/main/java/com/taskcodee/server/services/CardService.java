@@ -44,7 +44,6 @@ public class CardService {
     }
 
     public BoardCard save(Long listId, CardCreationDTO cardCreationDTO) {
-        //Обработать ситуацию, если у листа вообще не будет карточек
         Double maxPosition = boardListService.maxCardPositionFromBoardListById(listId);
 
         BoardCard card = new BoardCard();

@@ -17,5 +17,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     //Найти максимальную позицию листа в определенной доске
     @Query("SELECT MAX(l.pos) FROM Board b INNER JOIN BoardList l WHERE b.id = :id")
-    Double maxListPositionFromBoardById(@Param("id") Long id);
+    Optional<Double> maxListPositionFromBoardById(@Param("id") Long id);
 }
