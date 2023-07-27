@@ -1,0 +1,19 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start server",
+      "type": "shell",
+      "command": "pwsh -Command { cd .\\server ; $env:PG_PASSWORD=1234 ; .\\mvnw spring-boot:run } ",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start client",
+      "type": "shell",
+      "command": "cd .\\client ; npm run dev",
+      "problemMatcher": []
+    }
+  ]
+}
