@@ -36,6 +36,10 @@ public class BoardListService {
         return boardListRepository.getReferenceById(id);
     }
 
+    public Double maxCardPositionFromBoardListById(Long id) {
+        return boardListRepository.maxCardPositionFromBoardListById(id);
+    }
+
     @Transactional
     public BoardList save(Long boardId, BoardListCreationDTO boardListCreationDTO) {
         //Обработать ситуацию, если у доски вообще не будет листов

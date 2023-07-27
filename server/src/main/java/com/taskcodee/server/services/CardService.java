@@ -43,15 +43,19 @@ public class CardService {
         return cardRepository.getReferenceById(id);
     }
 
-    public BoardCard save(Long cardListId, CardCreationDTO cardCreationDTO) {
+    public BoardCard save(Long listId, CardCreationDTO cardCreationDTO) {
+        //Обработать ситуацию, если у листа вообще не будет карточек
+        Double maxPosition = boardListService.maxCardPositionFromBoardListById(listId);
+
         BoardCard card = new BoardCard();
         card.setTitle(cardCreationDTO.getTitle());
         card.setDescription(cardCreationDTO.getDescription());
-        card.setList(boardListService.getReferenceById(cardListId));
+        card.setList(boardListService.getReferenceById(listId));
+        card.setPos(maxPosition + 100);
         try {
             card = cardRepository.save(card);
         } catch (ConstraintViolationException ex) {
-            throw new MyEntityNotFoundException(cardListId);
+            throw new MyEntityNotFoundException(listId);
         }
         return card;
     }
