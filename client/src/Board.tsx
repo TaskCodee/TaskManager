@@ -84,9 +84,7 @@ const Board = ({ board }: { board: BoardData }) => {
         produce(prevBoard, (draft) => {
           if (!draft) return;
           const listIndex = draft.lists.findIndex((l) => l.id === listId);
-          console.log(draft.lists);
           const list = draft.lists[listIndex];
-          console.log(list);
           draft.lists.splice(listIndex, 1);
           draft.lists.splice(destination.listIndex, 0, list);
         })
@@ -96,17 +94,23 @@ const Board = ({ board }: { board: BoardData }) => {
     onSuccess: () => queryClient.invalidateQueries(['board']),
   });
 
-  const onDragEnd: OnDragEndResponder = useCallback((result) => {
-    console.log('List drag: ', result);
-    console.log(`${result.source.index} -> ${result.destination?.index}`);
-    const listId = Number(result.draggableId);
-    console.log({ listId });
+  const onDragEnd: OnDragEndResponder = useCallback(
+    (result) => {
+      console.log('List drag: ', result);
+      console.log(`${result.source.index} -> ${result.destination?.index}`);
+      const listId = Number(result.draggableId);
+      console.log({ listId });
 
-    const destListIndex = result.destination?.index;
-    if (!destListIndex) return;
-    const destination = { listIndex: destListIndex };
-    listMoveMutation.mutate({ listId, destination });
-  }, []);
+      const destListIndex = result.destination?.index;
+      if (destListIndex == null) return;
+
+      const destination = { listIndex: destListIndex };
+      console.log({ listId, destination });
+
+      listMoveMutation.mutate({ listId, destination });
+    },
+    [listMoveMutation]
+  );
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
