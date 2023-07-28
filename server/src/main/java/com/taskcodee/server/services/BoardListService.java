@@ -82,8 +82,14 @@ public class BoardListService {
             boardList.setPos(board.getLists().get(board.getLists().size() - 1).getPos() + 100);
         }
         else {
-            boardList.setPos((board.getLists().get(listIndexDTO.getIndexList()).getPos() +
-                    board.getLists().get(listIndexDTO.getIndexList() + 1).getPos()) / 2);
+            if(listIndexDTO.getIndexList() < board.getLists().indexOf(boardList)) {
+                boardList.setPos((board.getLists().get(listIndexDTO.getIndexList() - 1).getPos() +
+                        board.getLists().get(listIndexDTO.getIndexList()).getPos()) / 2);
+            }
+            else {
+                boardList.setPos((board.getLists().get(listIndexDTO.getIndexList()).getPos() +
+                        board.getLists().get(listIndexDTO.getIndexList() + 1).getPos()) / 2);
+            }
         }
         return boardListRepository.save(boardList);
     }
