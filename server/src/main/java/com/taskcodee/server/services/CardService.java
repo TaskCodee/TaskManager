@@ -97,8 +97,14 @@ public class CardService {
                 boardCard.setPos(boardList.getCards().get(boardList.getCards().size() - 1).getPos() + 100);
             }
             else {
-                boardCard.setPos((boardList.getCards().get(cardIndexDTO.getIndexCard()).getPos() +
-                        boardList.getCards().get(cardIndexDTO.getIndexCard() + 1).getPos()) / 2);
+                if(cardIndexDTO.getIndexCard() < boardList.getCards().indexOf(boardCard)) {
+                    boardCard.setPos((boardList.getCards().get(cardIndexDTO.getIndexCard() - 1).getPos() +
+                            boardList.getCards().get(cardIndexDTO.getIndexCard()).getPos()) / 2);
+                }
+                else {
+                    boardCard.setPos((boardList.getCards().get(cardIndexDTO.getIndexCard()).getPos() +
+                            boardList.getCards().get(cardIndexDTO.getIndexCard() + 1).getPos()) / 2);
+                }
             }
         }
         else {
