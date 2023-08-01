@@ -109,7 +109,7 @@ const BoardList = ({
     if (!board) return;
     const destListIndex = board.lists.findIndex((l) => l.id === list.id);
     const destCardIndex = result.destination?.index;
-    if (!destCardIndex) return;
+    if (destCardIndex == null) return;
     const destination = { listIndex: destListIndex, cardIndex: destCardIndex };
     cardMoveMutation.mutate({
       cardId: Number(result.draggableId),
